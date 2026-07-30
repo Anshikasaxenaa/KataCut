@@ -13,11 +13,15 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+import authRoutes from "./routes/auth";
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
 });
 app.use(limiter);
+
+app.use("/api/auth", authRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
