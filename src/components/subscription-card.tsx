@@ -5,7 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Subscription } from "@/lib/types/subscription";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Calendar, AlertTriangle, ChevronDown } from "lucide-react";
+import { Calendar, AlertTriangle, ChevronDown, Info } from "lucide-react";
+import { CancelButton } from "./cancel-button";
+import { getMerchantCancellationInfo } from "@/lib/cancellation/merchants";
 
 interface SubscriptionCardProps {
   subscription: Subscription;
@@ -79,6 +81,13 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
   const { merchant, amount, frequency, status, nextBilling, confidence, totalSpent, dormantDays } = subscription;
   const brand = getBrandStyles(merchant);
   const initial = merchant.charAt(0).toUpperCase();
+  const merchantInfo = getMerchantCancellationInfo(merchant);
+
+  const getDifficultyColor = (diff: string) => {
+    if (diff === 'easy') return 'bg-emerald-500';
+    if (diff === 'medium') return 'bg-amber-500';
+    return 'bg-rose-500';
+  };
 
   const statusConfig = {
     active: { label: "Active", dot: "bg-emerald-500", classes: "text-emerald-700 bg-emerald-100 dark:text-emerald-400 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20" },
@@ -112,9 +121,15 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                 </div>
               </div>
               
-              <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium ${currentStatus.classes}`}>
-                <span className={`w-1.5 h-1.5 rounded-full ${currentStatus.dot}`} />
-                {currentStatus.label}
+              <div className="flex items-center gap-1.5">
+                <div 
+                  className={`w-2 h-2 rounded-full cursor-help ${getDifficultyColor(merchantInfo.difficulty)}`}
+                  title={`Cancellation: ${merchantInfo.difficulty === 'easy' ? 'Easy (cancel online anytime)' : merchantInfo.difficulty === 'medium' ? 'Medium (requires navigation or email)' : 'Hard (requires phone call or multi-step process)'}`}
+                />
+                <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium ${currentStatus.classes}`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${currentStatus.dot}`} />
+                  {currentStatus.label}
+                </div>
               </div>
             </div>
 
@@ -179,7 +194,7 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                 
                 <div className="mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-800 flex justify-between items-center">
                   <span className="text-xs text-indigo-600 dark:text-indigo-400 font-medium cursor-pointer hover:underline">View all history</span>
-                  <span className="text-xs text-rose-600 dark:text-rose-400 font-medium cursor-pointer hover:underline">Cancel subscription</span>
+                  <CancelButton subscription={subscription} isDormant={status === 'dormant'} />
                 </div>
               </div>
             </motion.div>

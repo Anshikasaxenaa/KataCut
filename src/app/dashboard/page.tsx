@@ -12,6 +12,8 @@ import { TransactionsTable } from "@/components/transactions-table";
 import { SmsPasteArea } from "@/components/sms-paste-area";
 import { StatsCards } from "@/components/stats-cards";
 import { SubscriptionGrid } from "@/components/subscription-grid";
+import { CancellationHistory } from "@/components/cancellation-history";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FilterBar, FilterOption } from "@/components/filter-bar";
 import { SortDropdown, SortOption } from "@/components/sort-dropdown";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -297,34 +299,49 @@ export default function DashboardPage() {
 
           {/* MAIN CONTENT AREA */}
           <section className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <FilterBar 
-                options={filterOptions} 
-                activeFilter={activeFilter} 
-                onFilterChange={setActiveFilter} 
-              />
-              
-              <div className="flex items-center gap-3 w-full sm:w-auto">
-                <div className="relative w-full sm:w-64">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-400" />
-                  <Input 
-                    placeholder="Search subscriptions..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-indigo-500 h-9"
-                  />
-                </div>
-                <SortDropdown 
-                  activeSort={activeSort}
-                  onSortChange={setActiveSort}
-                />
+            <Tabs defaultValue="active" className="w-full">
+              <div className="flex items-center justify-between mb-6">
+                <TabsList className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+                  <TabsTrigger value="active">Active & Dormant</TabsTrigger>
+                  <TabsTrigger value="cancelled">Cancellation History</TabsTrigger>
+                </TabsList>
               </div>
-            </div>
 
-            <SubscriptionGrid 
-              subscriptions={filteredAndSortedSubs} 
-              isLoading={isProcessing} 
-            />
+              <TabsContent value="active" className="space-y-6 mt-0 focus-visible:outline-none focus-visible:ring-0">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <FilterBar 
+                    options={filterOptions} 
+                    activeFilter={activeFilter} 
+                    onFilterChange={setActiveFilter} 
+                  />
+                  
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <div className="relative w-full sm:w-64">
+                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-400" />
+                      <Input 
+                        placeholder="Search subscriptions..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-9 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-indigo-500 h-9"
+                      />
+                    </div>
+                    <SortDropdown 
+                      activeSort={activeSort}
+                      onSortChange={setActiveSort}
+                    />
+                  </div>
+                </div>
+
+                <SubscriptionGrid 
+                  subscriptions={filteredAndSortedSubs} 
+                  isLoading={isProcessing} 
+                />
+              </TabsContent>
+
+              <TabsContent value="cancelled" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+                <CancellationHistory />
+              </TabsContent>
+            </Tabs>
           </section>
 
           {/* TRANSACTIONS TABLE (Hidden by default to focus on subs, but kept for debug/viewing) */}
