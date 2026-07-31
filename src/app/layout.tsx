@@ -19,11 +19,7 @@ export const metadata: Metadata = {
 
 import { AuthProvider } from "@/hooks/use-auth";
 import { Navbar } from "@/components/navbar";
-// Note: Toaster component from shadcn is usually a separate component or provider
-// But if it's just the 'toaster' from ui we should use the proper one.
-// The shadcn component usually provides a Toaster component in toaster.tsx.
-// Let's check what was actually generated in components/ui.
-// For now, I'll assume we can use the Toaster from use-toast or toaster if available.
+import { ThemeProvider } from "@/components/theme-provider";
 
 export default function RootLayout({
   children,
@@ -33,16 +29,23 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-50">
-        <AuthProvider>
-          <Navbar />
-          <main className="flex-1">
-            {children}
-          </main>
-          {/* Note: I'll need to check if Toaster exists, if not I'll create it or run shadcn again */}
-        </AuthProvider>
+      <body className="min-h-full flex flex-col bg-white text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50 transition-colors duration-300">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            <Navbar />
+            <main className="flex-1">
+              {children}
+            </main>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
