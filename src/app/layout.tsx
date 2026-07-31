@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -8,7 +8,12 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 
+export const viewport: Viewport = {
+  themeColor: "#0f172a",
+};
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://your-vercel-url.vercel.app"),
   title: "KataCut - Privacy First Subscription Tracking",
   description:
     "Upload your bank statement to find and cancel forgotten subscriptions. 100% private, zero-knowledge encryption.",
@@ -64,7 +69,6 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: "KataCut",
   },
-  themeColor: "#0f172a",
 };
 
 import { AuthProvider } from "@/hooks/use-auth";
