@@ -55,35 +55,35 @@ const getBrandStyles = (merchantName: string) => {
 
 export function SubscriptionCardSkeleton() {
   return (
-    <Card className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 overflow-hidden">
+    <Card className="bg-slate-800/60 border-slate-700/50 overflow-hidden backdrop-blur-md">
       <CardContent className="p-5">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <Skeleton className="w-10 h-10 rounded-full" />
+            <Skeleton className="w-10 h-10 rounded-full bg-slate-700/50" />
             <div className="space-y-2">
-              <Skeleton className="h-4 w-[120px]" />
-              <Skeleton className="h-3 w-[80px]" />
+              <Skeleton className="h-4 w-[120px] bg-slate-700/50" />
+              <Skeleton className="h-3 w-[80px] bg-slate-700/50" />
             </div>
           </div>
-          <Skeleton className="h-6 w-[80px] rounded-full" />
+          <Skeleton className="h-6 w-[80px] rounded-full bg-slate-700/50" />
         </div>
 
         <div className="mt-5 grid grid-cols-2 gap-y-3 gap-x-2">
           <div className="space-y-2">
-            <Skeleton className="h-3 w-16" />
-            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-3 w-16 bg-slate-700/50" />
+            <Skeleton className="h-4 w-24 bg-slate-700/50" />
           </div>
           <div className="space-y-2">
-            <Skeleton className="h-3 w-16" />
-            <Skeleton className="h-4 w-12" />
+            <Skeleton className="h-3 w-16 bg-slate-700/50" />
+            <Skeleton className="h-4 w-12 bg-slate-700/50" />
           </div>
           <div className="space-y-2">
-            <Skeleton className="h-3 w-16" />
-            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-3 w-16 bg-slate-700/50" />
+            <Skeleton className="h-4 w-20 bg-slate-700/50" />
           </div>
         </div>
-        <div className="mt-4 flex items-center justify-center pt-3 border-t border-zinc-100 dark:border-zinc-800">
-          <Skeleton className="w-5 h-5 rounded-md" />
+        <div className="mt-4 flex items-center justify-center pt-3 border-t border-slate-700/50">
+          <Skeleton className="w-5 h-5 rounded-md bg-slate-700/50" />
         </div>
       </CardContent>
     </Card>
@@ -124,7 +124,6 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
       alert("Sharing is not supported on this device.");
     }
   };
-  const merchantInfo = getMerchantCancellationInfo(merchant);
 
   const getDifficultyColor = (diff: string) => {
     if (diff === "easy") return "bg-emerald-500";
@@ -135,34 +134,34 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
   const statusConfig = {
     active: {
       label: "Active",
-      dot: "bg-emerald-500",
+      dot: "bg-emerald-400",
       classes:
-        "text-emerald-700 bg-emerald-100 dark:text-emerald-400 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20",
+        "text-emerald-400 bg-emerald-500/10 border border-emerald-500/20",
     },
     dormant: {
       label: "Dormant",
-      dot: "bg-rose-500",
+      dot: "bg-rose-400",
       classes:
-        "text-rose-700 bg-rose-100 dark:text-rose-400 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20",
+        "text-rose-400 bg-rose-500/10 border border-rose-500/20 shadow-[0_0_10px_rgba(244,63,94,0.15)]",
     },
     expiring_soon: {
-      label: "Expiring Soon",
-      dot: "bg-amber-500",
+      label: "Upcoming",
+      dot: "bg-amber-400",
       classes:
-        "text-amber-700 bg-amber-100 dark:text-amber-400 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20",
+        "text-amber-400 bg-amber-500/10 border border-amber-500/20",
     },
     cancelled: {
       label: "Cancelled",
-      dot: "bg-zinc-500",
+      dot: "bg-slate-400",
       classes:
-        "text-zinc-600 bg-zinc-100 dark:text-zinc-400 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700",
+        "text-slate-400 bg-slate-800 border border-slate-700",
     },
   };
 
   const currentStatus = statusConfig[status];
 
   return (
-    <div className="relative overflow-hidden rounded-xl bg-rose-500 mb-4 group touch-pan-y">
+    <div className="relative overflow-hidden rounded-xl bg-rose-500 mb-4 group touch-pan-y shadow-[0_0_15px_rgba(0,0,0,0.2)]">
       {/* Swipe Action Background Layer */}
       <div className="absolute inset-y-0 right-0 flex items-center justify-end px-6 text-white font-medium w-full">
         <div
@@ -182,11 +181,11 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
         className="relative z-10 w-full"
       >
         <Card
-          className={`bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 transition-all duration-300 hover:shadow-xl hover:shadow-black/5 dark:hover:shadow-black/40 overflow-hidden ${status === "dormant" ? "border-l-4 border-l-rose-500" : ""}`}
+          className={`bg-slate-800/80 border-slate-700/50 backdrop-blur-md transition-all duration-300 hover:shadow-xl overflow-hidden ${status === "dormant" ? "border-l-4 border-l-rose-500" : ""}`}
         >
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="w-full text-left outline-none focus-visible:bg-zinc-50 dark:focus-visible:bg-zinc-800/50"
+            className="w-full text-left outline-none focus-visible:bg-slate-700/50"
           >
             <CardContent className="p-5">
               <div className="flex items-start justify-between">
@@ -197,14 +196,14 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                     {initial}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 truncate max-w-[140px] sm:max-w-[180px]">
+                    <h3 className="font-semibold text-white truncate max-w-[140px] sm:max-w-[180px]">
                       {merchant}
                     </h3>
-                    <div className="text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1">
-                      <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                    <div className="text-sm text-slate-400 flex items-center gap-1">
+                      <span className="font-medium text-slate-300">
                         ₹{amount.toLocaleString("en-IN")}
                       </span>
-                      <span className="text-zinc-300 dark:text-zinc-600">
+                      <span className="text-slate-500">
                         /
                       </span>
                       <span className="capitalize">
@@ -223,7 +222,7 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                     className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium ${currentStatus.classes}`}
                   >
                     <span
-                      className={`w-1.5 h-1.5 rounded-full ${currentStatus.dot}`}
+                      className={`w-1.5 h-1.5 rounded-full ${currentStatus.dot} ${status === 'dormant' ? 'animate-pulse' : ''}`}
                     />
                     {currentStatus.label}
                   </div>
@@ -232,11 +231,11 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
 
               <div className="mt-5 grid grid-cols-2 gap-y-3 gap-x-2 text-sm">
                 <div>
-                  <p className="text-zinc-500 dark:text-zinc-500 text-xs mb-1">
+                  <p className="text-slate-400 text-xs mb-1">
                     Next Billing
                   </p>
-                  <div className="flex items-center gap-1.5 text-zinc-700 dark:text-zinc-300">
-                    <Calendar className="w-3.5 h-3.5 text-zinc-400" />
+                  <div className="flex items-center gap-1.5 text-slate-200">
+                    <Calendar className="w-3.5 h-3.5 text-slate-400" />
                     {nextBilling
                       ? nextBilling.toLocaleDateString("en-IN", {
                           day: "numeric",
@@ -246,37 +245,37 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                   </div>
                 </div>
                 <div>
-                  <p className="text-zinc-500 dark:text-zinc-500 text-xs mb-1">
+                  <p className="text-slate-400 text-xs mb-1">
                     Confidence
                   </p>
-                  <div className="text-zinc-700 dark:text-zinc-300">
+                  <div className="text-slate-200">
                     {confidence}%
                   </div>
                 </div>
                 <div>
-                  <p className="text-zinc-500 dark:text-zinc-500 text-xs mb-1">
+                  <p className="text-slate-400 text-xs mb-1">
                     Total Spent
                   </p>
-                  <div className="text-zinc-700 dark:text-zinc-300">
+                  <div className="text-slate-200">
                     ₹{totalSpent.toLocaleString("en-IN")}
                   </div>
                 </div>
               </div>
 
               {status === "dormant" && (
-                <div className="mt-4 flex items-center gap-2 p-2.5 rounded-md bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400 text-xs border border-rose-100 dark:border-rose-500/20">
+                <div className="mt-4 flex items-center gap-2 p-2.5 rounded-md bg-rose-500/10 text-rose-400 text-xs border border-rose-500/20">
                   <AlertTriangle className="w-4 h-4 shrink-0" />
                   No activity detected in {dormantDays} days. Consider
                   cancelling.
                 </div>
               )}
 
-              <div className="mt-4 flex items-center justify-center pt-3 border-t border-zinc-100 dark:border-zinc-800/80">
+              <div className="mt-4 flex items-center justify-center pt-3 border-t border-slate-700/50">
                 <motion.div
                   animate={{ rotate: isOpen ? 180 : 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <ChevronDown className="w-5 h-5 text-zinc-400 dark:text-zinc-500" />
+                  <ChevronDown className="w-5 h-5 text-slate-400" />
                 </motion.div>
               </div>
             </CardContent>
@@ -290,8 +289,8 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               >
-                <div className="px-5 pb-5 pt-0 bg-zinc-50/50 dark:bg-zinc-950/30">
-                  <h4 className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-3">
+                <div className="px-5 pb-5 pt-4 bg-slate-900/50 border-t border-slate-700/50">
+                  <h4 className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-3">
                     Recent Transactions
                   </h4>
                   <div className="space-y-3">
@@ -304,7 +303,7 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                           className="flex items-center justify-between text-sm"
                         >
                           <div className="flex flex-col">
-                            <span className="text-zinc-700 dark:text-zinc-300 font-medium">
+                            <span className="text-slate-300 font-medium">
                               {tx.date.toLocaleDateString("en-IN", {
                                 day: "2-digit",
                                 month: "short",
@@ -312,33 +311,50 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                               })}
                             </span>
                             <span
-                              className="text-zinc-400 dark:text-zinc-500 text-[11px] truncate max-w-[150px]"
+                              className="text-slate-500 text-[11px] truncate max-w-[150px]"
                               title={tx.rawDescription}
                             >
                               {tx.rawDescription}
                             </span>
                           </div>
-                          <span className="text-zinc-900 dark:text-zinc-100 font-medium">
+                          <span className="text-slate-200 font-medium">
                             ₹{tx.amount.toLocaleString("en-IN")}
                           </span>
                         </div>
                       ))}
                   </div>
 
-                  <div className="mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-800 flex justify-between items-center">
-                    <span className="text-xs text-indigo-600 dark:text-indigo-400 font-medium cursor-pointer hover:underline">
+                  <div className="mt-6 pt-4 border-t border-slate-700/50 flex gap-3 items-center">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsOpen(false);
+                      }}
+                      className="flex-1 text-sm font-medium py-2 rounded-md bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
+                    >
+                      Keep
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsModalOpen(true);
+                      }}
+                      className="flex-1 text-sm font-medium py-2 rounded-md bg-rose-500 hover:bg-rose-600 text-white shadow-[0_0_15px_rgba(244,63,94,0.3)] transition-colors"
+                    >
+                      One-Click Cancel
+                    </button>
+                  </div>
+                  
+                  <div className="mt-3 flex justify-between">
+                    <span className="text-xs text-emerald-400 font-medium cursor-pointer hover:underline">
                       View all history
                     </span>
                     <button
                       onClick={handleShare}
-                      className="text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 font-medium flex items-center gap-1.5"
+                      className="text-xs text-slate-400 hover:text-slate-200 font-medium flex items-center gap-1.5"
                     >
                       <Share2 className="w-3.5 h-3.5" /> Share
                     </button>
-                    <CancelButton
-                      subscription={subscription}
-                      isDormant={status === "dormant"}
-                    />
                   </div>
                 </div>
               </motion.div>

@@ -20,13 +20,12 @@ export default function OfflinePage() {
       </p>
 
       <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-        <Button
-          asChild
-          size="lg"
-          className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white"
+        <Link
+          href="/dashboard"
+          className="inline-flex h-11 w-full sm:w-auto items-center justify-center rounded-md bg-indigo-600 px-8 text-sm font-medium text-white hover:bg-indigo-700"
         >
-          <Link href="/dashboard">View Offline Dashboard</Link>
-        </Button>
+          View Offline Dashboard
+        </Link>
         <Button
           variant="outline"
           size="lg"

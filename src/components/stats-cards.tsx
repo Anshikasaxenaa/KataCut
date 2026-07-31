@@ -68,82 +68,84 @@ export function StatsCards({ summary }: StatsCardsProps) {
       animate="show"
       className="grid gap-4 grid-cols-2 lg:grid-cols-4"
     >
-      <motion.div variants={item}>
-        <Card className="h-full bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 bg-gradient-to-br from-white to-zinc-50 dark:from-zinc-900 dark:to-zinc-900/50 hover:shadow-md transition-shadow">
+      <motion.div variants={item} className="col-span-2 lg:col-span-1">
+        <Card className="h-full bg-slate-800/50 border-slate-700/50 backdrop-blur-sm hover:bg-slate-800/80 transition-all shadow-[0_0_15px_rgba(0,0,0,0.2)]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+            <CardTitle className="text-sm font-medium text-slate-400">
               Monthly Spend
             </CardTitle>
-            <IndianRupee className="h-4 w-4 text-zinc-400" />
+            <IndianRupee className="h-4 w-4 text-slate-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+            <div className="text-3xl font-bold text-white tracking-tight">
               <AnimatedCounter value={summary.totalMonthlySpend} prefix="₹" />
             </div>
-            <p className="text-xs text-zinc-500 mt-1">Est. recurring outflow</p>
+            <p className="text-xs text-slate-500 mt-2">Est. recurring outflow</p>
           </CardContent>
         </Card>
       </motion.div>
 
-      <motion.div variants={item}>
-        <Card className="h-full bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 bg-gradient-to-br from-white to-zinc-50 dark:from-zinc-900 dark:to-zinc-900/50 hover:shadow-md transition-shadow">
+      <motion.div variants={item} className="col-span-2 lg:col-span-1">
+        <Card className="h-full bg-slate-800/50 border-slate-700/50 backdrop-blur-sm hover:bg-slate-800/80 transition-all shadow-[0_0_15px_rgba(0,0,0,0.2)]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+            <CardTitle className="text-sm font-medium text-slate-400">
               Active Subs
             </CardTitle>
-            <Layers className="h-4 w-4 text-zinc-400" />
+            <Layers className="h-4 w-4 text-slate-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+            <div className="text-3xl font-bold text-white tracking-tight">
               <AnimatedCounter value={summary.activeCount} />
             </div>
-            <p className="text-xs text-zinc-500 mt-1">Currently billing</p>
+            <p className="text-xs text-slate-500 mt-2">Currently billing</p>
           </CardContent>
         </Card>
       </motion.div>
 
-      <motion.div variants={item}>
+      <motion.div variants={item} className="col-span-2 lg:col-span-1">
         <Card
-          className={`h-full border-zinc-200 dark:border-zinc-800 hover:shadow-md transition-shadow bg-gradient-to-br ${summary.dormantCount > 0 ? "from-rose-50 to-white dark:from-rose-950/40 dark:to-zinc-900" : "from-white to-zinc-50 dark:from-zinc-900 dark:to-zinc-900/50"}`}
+          className={`h-full backdrop-blur-sm transition-all shadow-[0_0_15px_rgba(0,0,0,0.2)] ${summary.dormantCount > 0 ? "bg-rose-500/10 border-rose-500/30 hover:bg-rose-500/20 shadow-[0_0_20px_rgba(244,63,94,0.15)]" : "bg-slate-800/50 border-slate-700/50 hover:bg-slate-800/80"}`}
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle
-              className={`text-sm font-medium ${summary.dormantCount > 0 ? "text-rose-600 dark:text-rose-400" : "text-zinc-500 dark:text-zinc-400"}`}
+              className={`text-sm font-medium ${summary.dormantCount > 0 ? "text-rose-400" : "text-slate-400"}`}
             >
-              Dormant Alerts
+              Money Leaks
             </CardTitle>
             <AlertTriangle
-              className={`h-4 w-4 ${summary.dormantCount > 0 ? "text-rose-500 dark:text-rose-400" : "text-zinc-400"}`}
+              className={`h-4 w-4 ${summary.dormantCount > 0 ? "text-rose-500 animate-pulse" : "text-slate-400"}`}
             />
           </CardHeader>
           <CardContent>
             <div
-              className={`text-2xl font-bold ${summary.dormantCount > 0 ? "text-rose-600 dark:text-rose-500" : "text-zinc-900 dark:text-zinc-50"}`}
+              className={`text-3xl font-bold tracking-tight ${summary.dormantCount > 0 ? "text-rose-400" : "text-white"}`}
             >
               <AnimatedCounter value={summary.dormantCount} />
             </div>
-            <p className="text-xs text-zinc-500 mt-1">Unused for 60+ days</p>
+            <p className={`text-xs mt-2 font-medium ${summary.dormantCount > 0 ? "text-rose-400/80" : "text-slate-500"}`}>
+              {summary.dormantCount > 0 ? "🚨 Dormant apps draining money" : "No dormant subs"}
+            </p>
           </CardContent>
         </Card>
       </motion.div>
 
-      <motion.div variants={item}>
-        <Card className="h-full bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-950/20 dark:to-zinc-900 hover:shadow-md transition-shadow">
+      <motion.div variants={item} className="col-span-2 lg:col-span-1">
+        <Card className="h-full bg-emerald-500/10 border-emerald-500/20 backdrop-blur-sm hover:bg-emerald-500/20 transition-all shadow-[0_0_15px_rgba(16,185,129,0.1)]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-emerald-600 dark:text-emerald-500">
+            <CardTitle className="text-sm font-medium text-emerald-400">
               Potential Savings
             </CardTitle>
-            <TrendingDown className="h-4 w-4 text-emerald-500" />
+            <TrendingDown className="h-4 w-4 text-emerald-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+            <div className="text-3xl font-bold text-emerald-400 tracking-tight">
               <AnimatedCounter
                 value={summary.potentialSavings}
                 prefix="₹"
                 suffix="/mo"
               />
             </div>
-            <p className="text-xs text-emerald-600/70 dark:text-emerald-500/70 mt-1">
+            <p className="text-xs text-emerald-400/70 mt-2 font-medium">
               By cancelling dormant subs
             </p>
           </CardContent>

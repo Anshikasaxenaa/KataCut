@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   getMerchantCancellationInfo,
-  CANCELLATION_REASONS,
 } from "@/lib/cancellation/merchants";
 import { generateCancellationEmail } from "@/lib/cancellation/generator";
 import { Subscription } from "@/lib/types/subscription";
@@ -145,25 +144,25 @@ export function CancellationModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onModalChange}>
-      <DialogContent className="sm:max-w-[425px] bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800">
+      <DialogContent className="sm:max-w-[425px] bg-slate-900/80 backdrop-blur-xl border-slate-700/50 text-white p-6 shadow-2xl rounded-t-3xl sm:rounded-2xl">
         <DialogHeader className="mb-4">
           <div className="flex items-center justify-center gap-2 mb-4">
             <div
-              className={`h-2 w-12 rounded-full ${step >= 1 ? "bg-indigo-600" : "bg-zinc-200 dark:bg-zinc-800"}`}
+              className={`h-1.5 w-12 rounded-full ${step >= 1 ? "bg-emerald-500" : "bg-slate-700/50"}`}
             />
             <div
-              className={`h-2 w-12 rounded-full ${step >= 2 ? "bg-indigo-600" : "bg-zinc-200 dark:bg-zinc-800"}`}
+              className={`h-1.5 w-12 rounded-full ${step >= 2 ? "bg-emerald-500" : "bg-slate-700/50"}`}
             />
             <div
-              className={`h-2 w-12 rounded-full ${step >= 3 ? "bg-indigo-600" : "bg-zinc-200 dark:bg-zinc-800"}`}
+              className={`h-1.5 w-12 rounded-full ${step >= 3 ? "bg-emerald-500" : "bg-slate-700/50"}`}
             />
           </div>
-          <DialogTitle className="text-xl text-center">
+          <DialogTitle className="text-xl text-center font-bold tracking-tight">
             {step === 1 && "Why are you cancelling?"}
             {step === 2 && "Here's how to cancel"}
             {step === 3 && "All done?"}
           </DialogTitle>
-          <DialogDescription className="text-center">
+          <DialogDescription className="text-center text-slate-400">
             {step === 2 &&
               `We've gathered the exact steps to cancel ${subscription.merchant}.`}
           </DialogDescription>
@@ -177,7 +176,7 @@ export function CancellationModal({
                 {ReasonsList.map((r) => (
                   <label
                     key={r.id}
-                    className="flex items-center gap-3 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900 cursor-pointer transition-colors"
+                    className="flex items-center gap-3 p-3 rounded-xl border border-slate-700/50 bg-slate-800/30 hover:bg-slate-700/50 cursor-pointer transition-colors"
                   >
                     <input
                       type="radio"
@@ -185,9 +184,9 @@ export function CancellationModal({
                       value={r.id}
                       checked={reason === r.id}
                       onChange={(e) => setReason(e.target.value)}
-                      className="text-indigo-600 focus:ring-indigo-600 w-4 h-4"
+                      className="text-emerald-500 focus:ring-emerald-500 w-4 h-4 bg-slate-800 border-slate-600"
                     />
-                    <span className="text-sm font-medium">{r.label}</span>
+                    <span className="text-sm font-medium text-slate-200">{r.label}</span>
                   </label>
                 ))}
               </div>
@@ -196,7 +195,7 @@ export function CancellationModal({
                   placeholder="Please specify..."
                   value={otherReason}
                   onChange={(e) => setOtherReason(e.target.value)}
-                  className="mt-2"
+                  className="mt-2 bg-slate-800/50 border-slate-700/50 text-white placeholder:text-slate-500"
                   autoFocus
                 />
               )}
@@ -204,6 +203,7 @@ export function CancellationModal({
                 <Button
                   onClick={handleNext}
                   disabled={!reason || (reason === "other" && !otherReason)}
+                  className="bg-emerald-500 hover:bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] rounded-full px-6"
                 >
                   Next <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
@@ -214,53 +214,49 @@ export function CancellationModal({
           {/* STEP 2 */}
           {step === 2 && (
             <div className="space-y-5">
-              <div className="flex items-center gap-2 text-sm p-3 bg-zinc-50 dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800">
+              <div className="flex items-center gap-2 text-sm p-3 bg-slate-800/50 rounded-xl border border-slate-700/50">
                 <div
                   className={`w-2 h-2 rounded-full shrink-0 ${getDifficultyColor(merchantInfo.difficulty)}`}
                 />
-                <span className="font-medium capitalize">
+                <span className="font-medium capitalize text-slate-200">
                   Difficulty: {merchantInfo.difficulty}
                 </span>
-                <span className="text-zinc-500 mx-2">|</span>
-                <span className="text-zinc-600 dark:text-zinc-400 text-xs">
+                <span className="text-slate-600 mx-2">|</span>
+                <span className="text-slate-400 text-xs">
                   {merchantInfo.cancellationPolicy}
                 </span>
               </div>
 
               <div className="space-y-3">
                 {merchantInfo.cancelUrl && (
-                  <Button
-                    className="w-full justify-between bg-indigo-600 hover:bg-indigo-700 text-white"
-                    asChild
+                  <a
+                    href={merchantInfo.cancelUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full items-center justify-between bg-emerald-500 hover:bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] rounded-xl h-12 px-4 text-sm font-medium transition-colors"
                   >
-                    <a
-                      href={merchantInfo.cancelUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Cancel Online <ExternalLink className="w-4 h-4" />
-                    </a>
-                  </Button>
+                    Cancel Online <ExternalLink className="w-4 h-4" />
+                  </a>
                 )}
 
                 {merchantInfo.supportEmail && (
                   <div className="space-y-2">
                     <Button
                       variant="outline"
-                      className="w-full justify-between"
+                      className="w-full justify-between border-slate-700 bg-slate-800/50 hover:bg-slate-700/50 text-slate-200 hover:text-white rounded-xl h-12"
                       onClick={handleSendEmail}
                       disabled={isSending}
                     >
                       {isSending ? "Sending..." : "Send Cancellation Email"}{" "}
-                      <Mail className="w-4 h-4" />
+                      <Mail className="w-4 h-4 text-slate-400" />
                     </Button>
                     {emailStatus === "success" && (
-                      <p className="text-xs text-emerald-600 text-center">
+                      <p className="text-xs text-emerald-400 text-center font-medium">
                         Email sent successfully!
                       </p>
                     )}
                     {emailStatus === "error" && (
-                      <p className="text-xs text-rose-600 text-center">
+                      <p className="text-xs text-rose-400 text-center font-medium">
                         Failed to send email. Try again.
                       </p>
                     )}
@@ -268,29 +264,24 @@ export function CancellationModal({
                 )}
 
                 {merchantInfo.phone && (
-                  <Button
-                    variant="outline"
-                    className="w-full justify-between"
-                    asChild
+                  <a
+                    href={`tel:${merchantInfo.phone.replace(/[^0-9+]/g, "")}`}
+                    className="inline-flex w-full items-center justify-between border border-slate-700 bg-slate-800/50 hover:bg-slate-700/50 text-slate-200 hover:text-white rounded-xl h-12 px-4 text-sm font-medium transition-colors"
                   >
-                    <a
-                      href={`tel:${merchantInfo.phone.replace(/[^0-9+]/g, "")}`}
-                    >
-                      Call Customer Care: {merchantInfo.phone}{" "}
-                      <Phone className="w-4 h-4" />
-                    </a>
-                  </Button>
+                    Call Customer Care: {merchantInfo.phone}{" "}
+                    <Phone className="w-4 h-4 text-slate-400" />
+                  </a>
                 )}
               </div>
 
               {merchantInfo.instructions &&
                 merchantInfo.instructions.length > 0 && (
-                  <div className="mt-4 p-4 rounded-lg bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/50">
-                    <h4 className="font-semibold text-indigo-900 dark:text-indigo-300 mb-2 flex items-center gap-2 text-sm">
-                      <AlertCircle className="w-4 h-4" /> Step-by-step
+                  <div className="mt-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                    <h4 className="font-semibold text-slate-200 mb-2 flex items-center gap-2 text-sm">
+                      <AlertCircle className="w-4 h-4 text-emerald-500" /> Step-by-step
                       instructions
                     </h4>
-                    <ol className="list-decimal list-inside space-y-1.5 text-xs text-indigo-800 dark:text-indigo-400">
+                    <ol className="list-decimal list-inside space-y-1.5 text-xs text-slate-400">
                       {merchantInfo.instructions.map((inst, i) => (
                         <li key={i}>{inst}</li>
                       ))}
@@ -300,21 +291,21 @@ export function CancellationModal({
 
               <div className="pt-4 flex flex-col gap-3">
                 <Button
-                  className="w-full bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100"
+                  className="w-full bg-white text-slate-900 hover:bg-slate-200 rounded-xl h-12 font-semibold"
                   onClick={markAsCancelled}
                 >
                   I've cancelled it!
                 </Button>
-                <div className="flex justify-between items-center text-sm">
+                <div className="flex justify-between items-center text-sm px-2">
                   <button
                     onClick={handleBack}
-                    className="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 flex items-center"
+                    className="text-slate-400 hover:text-white flex items-center transition-colors"
                   >
                     <ChevronLeft className="w-4 h-4 mr-1" /> Back
                   </button>
                   <button
                     onClick={handleRemindLater}
-                    className="text-indigo-600 dark:text-indigo-400 hover:underline"
+                    className="text-emerald-400 hover:text-emerald-300 hover:underline transition-colors"
                   >
                     Remind me later
                   </button>
@@ -326,9 +317,9 @@ export function CancellationModal({
           {/* STEP 3 */}
           {step === 3 && (
             <div className="text-center py-6 space-y-4">
-              <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
                 <svg
-                  className="w-8 h-8"
+                  className="w-10 h-10"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -342,12 +333,12 @@ export function CancellationModal({
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-2xl font-bold text-white tracking-tight">
                 Awesome!
               </h3>
-              <p className="text-zinc-500 dark:text-zinc-400">
+              <p className="text-slate-400">
                 You've just saved{" "}
-                <span className="font-semibold text-emerald-600">
+                <span className="font-semibold text-emerald-400">
                   ₹{subscription.amount.toLocaleString("en-IN")}
                 </span>{" "}
                 per{" "}
@@ -357,7 +348,7 @@ export function CancellationModal({
                 .
               </p>
               <div className="pt-6">
-                <Button className="w-full" onClick={() => onModalChange(false)}>
+                <Button className="w-full bg-slate-800 hover:bg-slate-700 text-white rounded-xl h-12" onClick={() => onModalChange(false)}>
                   Close
                 </Button>
               </div>

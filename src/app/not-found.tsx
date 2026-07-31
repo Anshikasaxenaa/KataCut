@@ -17,13 +17,12 @@ export default function NotFound() {
         The page you are looking for has either been cancelled, hidden, or never
         existed in the first place.
       </p>
-      <Button
-        asChild
-        size="lg"
-        className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-full px-8 shadow-md"
+      <Link
+        href="/dashboard"
+        className="inline-flex h-11 items-center justify-center rounded-full bg-emerald-500 px-8 font-medium text-white shadow-md hover:bg-emerald-600 transition-colors"
       >
-        <Link href="/dashboard">Return to Dashboard</Link>
-      </Button>
+        Return to Dashboard
+      </Link>
     </div>
   );
 }

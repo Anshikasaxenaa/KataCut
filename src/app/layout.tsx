@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
+  variable: "--font-sans",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "KataCut - Privacy First Subscription Tracking",
@@ -73,6 +69,7 @@ export const metadata: Metadata = {
 
 import { AuthProvider } from "@/hooks/use-auth";
 import { Navbar } from "@/components/navbar";
+import { BottomNav } from "@/components/bottom-nav";
 import { ThemeProvider } from "@/components/theme-provider";
 import { InstallPrompt } from "@/components/install-prompt";
 import { ErrorBoundary } from "@/components/error-boundary";
@@ -86,12 +83,12 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${plusJakarta.variable} font-sans h-full antialiased dark`}
     >
       <head>
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
-      <body className="min-h-full flex flex-col bg-white text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50 transition-colors duration-300">
+      <body className="min-h-full flex flex-col bg-slate-900 text-slate-50 selection:bg-emerald-500/30">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -103,6 +100,7 @@ export default function RootLayout({
             <AuthProvider>
               <Navbar />
               <main className="flex-1">{children}</main>
+              <BottomNav />
             </AuthProvider>
           </ErrorBoundary>
         </ThemeProvider>
