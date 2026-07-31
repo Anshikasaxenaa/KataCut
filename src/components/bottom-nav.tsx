@@ -10,7 +10,7 @@ export function BottomNav() {
   const navItems = [
     { id: "home", label: "Dashboard", icon: Home },
     { id: "upload", label: "Upload", icon: Upload },
-    { id: "activity", label: "Activity", icon: Activity },
+    { id: "history", label: "History", icon: Activity },
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
@@ -20,7 +20,12 @@ export function BottomNav() {
         {navItems.map((item) => (
           <button
             key={item.id}
-            onClick={() => setActive(item.id)}
+            onClick={() => {
+              setActive(item.id);
+              if (typeof navigator !== "undefined" && navigator.vibrate) {
+                navigator.vibrate(10);
+              }
+            }}
             className={cn(
               "flex flex-col items-center justify-center w-full h-full min-w-[44px] min-h-[44px] transition-colors",
               active === item.id 

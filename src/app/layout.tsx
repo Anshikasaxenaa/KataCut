@@ -15,11 +15,19 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "KataCut - Privacy First Subscription Tracking",
   description: "KataCut - Know where your money goes. Privacy-first subscription tracking.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "KataCut",
+  },
+  themeColor: "#0f172a",
 };
 
 import { AuthProvider } from "@/hooks/use-auth";
 import { Navbar } from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
+import { InstallPrompt } from "@/components/install-prompt";
 
 export default function RootLayout({
   children,
@@ -32,6 +40,9 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+      </head>
       <body className="min-h-full flex flex-col bg-white text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50 transition-colors duration-300">
         <ThemeProvider
           attribute="class"
@@ -39,6 +50,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <InstallPrompt />
           <AuthProvider>
             <Navbar />
             <main className="flex-1">

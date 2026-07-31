@@ -5,9 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Subscription } from "@/lib/types/subscription";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Calendar, AlertTriangle, ChevronDown, Info } from "lucide-react";
+import { Calendar, AlertTriangle, ChevronDown, Info, Trash2, Share2 } from "lucide-react";
 import { CancelButton } from "./cancel-button";
 import { getMerchantCancellationInfo } from "@/lib/cancellation/merchants";
+import { CancellationModal } from "./cancellation-modal";
 
 interface SubscriptionCardProps {
   subscription: Subscription;
@@ -77,10 +78,29 @@ export function SubscriptionCardSkeleton() {
 
 export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   const { merchant, amount, frequency, status, nextBilling, confidence, totalSpent, dormantDays } = subscription;
   const brand = getBrandStyles(merchant);
   const initial = merchant.charAt(0).toUpperCase();
+  const merchantInfo = getMerchantCancellationInfo(merchant);
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `KataCut - ${merchant}`,
+          text: `I tracked my ${merchant} subscription on KataCut! It costs ₹${amount}/${frequency}. I'm finding forgotten subscriptions easily.`,
+          url: window.location.origin,
+        });
+      } catch (err) {
+        console.error("Error sharing:", err);
+      }
+    } else {
+      alert("Sharing is not supported on this device.");
+    }
+  };
   const merchantInfo = getMerchantCancellationInfo(merchant);
 
   const getDifficultyColor = (diff: string) => {
@@ -99,12 +119,27 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
   const currentStatus = statusConfig[status];
 
   return (
-    <motion.div layout>
-      <Card className={`bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 transition-all duration-300 hover:shadow-xl hover:shadow-black/5 dark:hover:shadow-black/40 overflow-hidden ${status === 'dormant' ? 'border-l-4 border-l-rose-500' : ''}`}>
-        <button 
-          onClick={() => setIsOpen(!isOpen)}
-          className="w-full text-left outline-none focus-visible:bg-zinc-50 dark:focus-visible:bg-zinc-800/50"
-        >
+    <div className="relative overflow-hidden rounded-xl bg-rose-500 mb-4 group touch-pan-y">
+      {/* Swipe Action Background Layer */}
+      <div className="absolute inset-y-0 right-0 flex items-center justify-end px-6 text-white font-medium w-full">
+        <div className="flex flex-col items-center gap-1 cursor-pointer" onClick={() => setIsModalOpen(true)}>
+          <Trash2 className="w-5 h-5 mb-1" />
+          <span className="text-xs">Cancel</span>
+        </div>
+      </div>
+      
+      <motion.div 
+        layout 
+        drag="x" 
+        dragConstraints={{ left: -80, right: 0 }}
+        dragElastic={0.1}
+        className="relative z-10 w-full"
+      >
+        <Card className={`bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 transition-all duration-300 hover:shadow-xl hover:shadow-black/5 dark:hover:shadow-black/40 overflow-hidden ${status === 'dormant' ? 'border-l-4 border-l-rose-500' : ''}`}>
+          <button 
+            onClick={() => setIsOpen(!isOpen)}
+            className="w-full text-left outline-none focus-visible:bg-zinc-50 dark:focus-visible:bg-zinc-800/50"
+          >
           <CardContent className="p-5">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
@@ -194,6 +229,9 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                 
                 <div className="mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-800 flex justify-between items-center">
                   <span className="text-xs text-indigo-600 dark:text-indigo-400 font-medium cursor-pointer hover:underline">View all history</span>
+                  <button onClick={handleShare} className="text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 font-medium flex items-center gap-1.5">
+                    <Share2 className="w-3.5 h-3.5" /> Share
+                  </button>
                   <CancelButton subscription={subscription} isDormant={status === 'dormant'} />
                 </div>
               </div>
@@ -201,6 +239,8 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
           )}
         </AnimatePresence>
       </Card>
-    </motion.div>
+      </motion.div>
+      <CancellationModal isOpen={isModalOpen} onOpenChange={setIsModalOpen} subscription={subscription} />
+    </div>
   );
 }

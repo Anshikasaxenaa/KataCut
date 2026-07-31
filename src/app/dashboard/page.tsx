@@ -21,8 +21,8 @@ import { BottomNav } from "@/components/bottom-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { AlertCircle, FileText, MessageSquare, Search, Loader2 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AlertCircle, FileText, MessageSquare, Search, Loader2, Bell, BellOff, RefreshCw } from "lucide-react";
+import { motion, AnimatePresence, useAnimation } from "framer-motion";
 
 // Crypto & Storage
 import { Vault } from "@/lib/crypto/vault";
@@ -47,6 +47,52 @@ export default function DashboardPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showUpload, setShowUpload] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  
+  // PWA & Mobile Features
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const refreshControls = useAnimation();
+
+  useEffect(() => {
+    if ("Notification" in window) {
+      setNotificationsEnabled(Notification.permission === "granted");
+    }
+  }, []);
+
+  const handleToggleNotifications = async () => {
+    if (!("Notification" in window)) {
+      alert("This browser does not support notifications.");
+      return;
+    }
+    
+    if (Notification.permission === "granted") {
+      alert("Notifications are already enabled! To disable, please use your browser settings.");
+    } else if (Notification.permission !== "denied") {
+      const permission = await Notification.requestPermission();
+      setNotificationsEnabled(permission === "granted");
+      if (permission === "granted") {
+        new Notification("KataCut", {
+          body: "You will now receive alerts for upcoming renewals and savings!",
+          icon: "/icons/icon-192x192.png"
+        });
+      }
+    } else {
+      alert("Notifications are blocked by your browser settings.");
+    }
+  };
+
+  const handleRefresh = async () => {
+    if (isRefreshing) return;
+    setIsRefreshing(true);
+    await refreshControls.start({ y: 60, transition: { type: "spring", stiffness: 300, damping: 20 } });
+    
+    // Simulate refresh delay
+    setTimeout(async () => {
+      setLastUpdated(new Date());
+      setIsRefreshing(false);
+      await refreshControls.start({ y: 0, transition: { type: "spring", stiffness: 300, damping: 20 } });
+    }, 1500);
+  };
 
   // Vault State
   const [vaultSalt, setVaultSalt] = useState<string | null>(null);
@@ -219,7 +265,25 @@ export default function DashboardPage() {
 
   return (
     <AuthGuard>
-      <div className="flex min-h-screen flex-col items-center bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 transition-colors duration-300 pb-24 md:pb-8">
+      <motion.div 
+        animate={refreshControls}
+        drag="y"
+        dragConstraints={{ top: 0, bottom: 0 }}
+        dragElastic={0.2}
+        onDragEnd={(e, info) => {
+          if (info.offset.y > 100) {
+            handleRefresh();
+          } else {
+            refreshControls.start({ y: 0 });
+          }
+        }}
+        className="flex min-h-screen flex-col items-center bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 transition-colors duration-300 pb-24 md:pb-8 touch-pan-x"
+      >
+        {isRefreshing && (
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-white dark:bg-zinc-800 rounded-full p-2 shadow-lg flex items-center justify-center">
+            <RefreshCw className="w-5 h-5 text-indigo-600 animate-spin" />
+          </div>
+        )}
         <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 space-y-8">
           
           {/* TOP BAR */}
@@ -238,6 +302,15 @@ export default function DashboardPage() {
             </div>
             
             <div className="flex items-center gap-3">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handleToggleNotifications}
+                className={notificationsEnabled ? "text-emerald-600" : "text-zinc-400"}
+                title={notificationsEnabled ? "Notifications enabled" : "Enable notifications"}
+              >
+                {notificationsEnabled ? <Bell className="w-4 h-4" /> : <BellOff className="w-4 h-4" />}
+              </Button>
               <EncryptionIndicator />
               <Button variant="outline" size="sm" onClick={() => setShowUpload(!showUpload)} className="hidden sm:flex bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-sm">
                 <FileText className="w-4 h-4 mr-2" />
@@ -374,7 +447,7 @@ export default function DashboardPage() {
           )}
         </div>
         <BottomNav />
-      </div>
+      </motion.div>
     </AuthGuard>
   );
 }
