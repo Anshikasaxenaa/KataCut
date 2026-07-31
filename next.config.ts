@@ -24,7 +24,8 @@ const securityHeaders = [
   },
   {
     key: "Content-Security-Policy",
-    value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self';",
+    value:
+      "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self';",
   },
 ];
 
@@ -46,9 +47,9 @@ const withPWA = withPWAInit({
           cacheName: "offlineCache",
           expiration: {
             maxEntries: 200,
-            maxAgeSeconds: 24 * 60 * 60 // 24 hours
-          }
-        }
+            maxAgeSeconds: 24 * 60 * 60, // 24 hours
+          },
+        },
       },
       {
         urlPattern: /\/api\/.*$/i,
@@ -57,7 +58,7 @@ const withPWA = withPWAInit({
           cacheName: "api-cache",
           expiration: {
             maxEntries: 50,
-            maxAgeSeconds: 24 * 60 * 60 // 24 hours
+            maxAgeSeconds: 24 * 60 * 60, // 24 hours
           },
           networkTimeoutSeconds: 10,
         },
@@ -94,12 +95,12 @@ const withPWA = withPWAInit({
             maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
           },
         },
-      }
+      },
     ],
   },
   fallbacks: {
     document: "/offline", // offline fallback page
-  }
+  },
 });
 
 const nextConfig: NextConfig = {

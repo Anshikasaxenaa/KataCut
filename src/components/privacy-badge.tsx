@@ -18,7 +18,9 @@ export function PrivacyBadge() {
         </TooltipTrigger>
         <TooltipContent className="max-w-xs bg-zinc-900 border-zinc-800 text-zinc-100 p-3">
           <p className="text-sm">
-            Your bank data never leaves your device. It is encrypted with AES-256-GCM before storage using a passphrase only you know. Even we can't access it.
+            Your bank data never leaves your device. It is encrypted with
+            AES-256-GCM before storage using a passphrase only you know. Even we
+            can't access it.
           </p>
         </TooltipContent>
       </Tooltip>

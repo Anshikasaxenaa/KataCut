@@ -12,22 +12,37 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="text-xl font-bold text-white tracking-tight">
-              Kata<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Cut</span>
+            <Link
+              href="/"
+              className="text-xl font-bold text-white tracking-tight"
+            >
+              Kata
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
+                Cut
+              </span>
             </Link>
           </div>
           <div className="flex items-center space-x-4">
             {isAuthenticated ? (
               <>
-                <span className="text-sm text-zinc-400 hidden sm:block">{user?.email}</span>
-                <Button variant="ghost" className="text-zinc-300 hover:text-white hover:bg-zinc-800" onClick={logout}>
+                <span className="text-sm text-zinc-400 hidden sm:block">
+                  {user?.email}
+                </span>
+                <Button
+                  variant="ghost"
+                  className="text-zinc-300 hover:text-white hover:bg-zinc-800"
+                  onClick={logout}
+                >
                   Logout
                 </Button>
               </>
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost" className="text-zinc-300 hover:text-white hover:bg-zinc-800">
+                  <Button
+                    variant="ghost"
+                    className="text-zinc-300 hover:text-white hover:bg-zinc-800"
+                  >
                     Login
                   </Button>
                 </Link>

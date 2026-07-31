@@ -15,7 +15,7 @@ const TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes to match vault.ts
 export function EncryptionIndicator() {
   const [isLocked, setIsLocked] = useState(Vault.isLocked());
   const [timeLeft, setTimeLeft] = useState(TIMEOUT_MS);
-  
+
   // Track lock state
   useEffect(() => {
     const unsubscribe = Vault.subscribe((locked) => {
@@ -24,10 +24,10 @@ export function EncryptionIndicator() {
         setTimeLeft(TIMEOUT_MS);
       }
     });
-    
+
     // Check initial state in case it changed before mount
     setIsLocked(Vault.isLocked());
-    
+
     return unsubscribe;
   }, []);
 
@@ -71,7 +71,7 @@ export function EncryptionIndicator() {
 
   const minutes = Math.floor(timeLeft / 60000);
   const seconds = Math.floor((timeLeft % 60000) / 1000);
-  const formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  const formattedTime = `${minutes}:${seconds.toString().padStart(2, "0")}`;
 
   if (isLocked) {
     return (
@@ -98,7 +98,7 @@ export function EncryptionIndicator() {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger>
-          <button 
+          <button
             onClick={handleLockClick}
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-medium text-emerald-600 dark:text-emerald-500 hover:bg-rose-500/10 hover:border-rose-500/20 hover:text-rose-600 dark:hover:text-rose-500 transition-colors group"
           >

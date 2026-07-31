@@ -28,13 +28,20 @@ export function BottomNav() {
             }}
             className={cn(
               "flex flex-col items-center justify-center w-full h-full min-w-[44px] min-h-[44px] transition-colors",
-              active === item.id 
-                ? "text-indigo-600 dark:text-indigo-400" 
-                : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200"
+              active === item.id
+                ? "text-indigo-600 dark:text-indigo-400"
+                : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200",
             )}
           >
-            <item.icon className={cn("h-5 w-5 mb-1 transition-transform", active === item.id && "scale-110")} />
-            <span className="text-[10px] font-medium tracking-wide">{item.label}</span>
+            <item.icon
+              className={cn(
+                "h-5 w-5 mb-1 transition-transform",
+                active === item.id && "scale-110",
+              )}
+            />
+            <span className="text-[10px] font-medium tracking-wide">
+              {item.label}
+            </span>
           </button>
         ))}
       </div>

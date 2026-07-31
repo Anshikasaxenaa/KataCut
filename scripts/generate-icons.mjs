@@ -1,10 +1,10 @@
-import fs from 'fs';
-import path from 'path';
-import sharp from 'sharp';
+import fs from "fs";
+import path from "path";
+import sharp from "sharp";
 
-const PUBLIC_DIR = path.resolve('public');
-const ICONS_DIR = path.join(PUBLIC_DIR, 'icons');
-const SCREENSHOTS_DIR = path.join(PUBLIC_DIR, 'screenshots');
+const PUBLIC_DIR = path.resolve("public");
+const ICONS_DIR = path.join(PUBLIC_DIR, "icons");
+const SCREENSHOTS_DIR = path.join(PUBLIC_DIR, "screenshots");
 
 if (!fs.existsSync(ICONS_DIR)) {
   fs.mkdirSync(ICONS_DIR, { recursive: true });
@@ -43,7 +43,7 @@ const mockDashboardSvg = `
 const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
 
 async function generate() {
-  console.log('Generating standard icons...');
+  console.log("Generating standard icons...");
   for (const size of sizes) {
     await sharp(Buffer.from(svgIcon))
       .resize(size, size)
@@ -51,24 +51,24 @@ async function generate() {
     console.log(`Generated icon-${size}x${size}.png`);
   }
 
-  console.log('Generating maskable icon...');
+  console.log("Generating maskable icon...");
   await sharp(Buffer.from(maskableSvgIcon))
     .resize(512, 512)
-    .toFile(path.join(ICONS_DIR, 'icon-maskable-512x512.png'));
-  console.log('Generated icon-maskable-512x512.png');
+    .toFile(path.join(ICONS_DIR, "icon-maskable-512x512.png"));
+  console.log("Generated icon-maskable-512x512.png");
 
-  console.log('Generating favicon.ico (32x32)...');
+  console.log("Generating favicon.ico (32x32)...");
   // Just generate a 32x32 png for favicon instead of true .ico for simplicity, browser accepts png renamed
   await sharp(Buffer.from(svgIcon))
     .resize(32, 32)
-    .toFile(path.join(PUBLIC_DIR, 'favicon.ico'));
-  
-  console.log('Generating screenshot...');
+    .toFile(path.join(PUBLIC_DIR, "favicon.ico"));
+
+  console.log("Generating screenshot...");
   await sharp(Buffer.from(mockDashboardSvg))
     .resize(1080, 1920)
-    .toFile(path.join(SCREENSHOTS_DIR, 'dashboard.png'));
-    
-  console.log('Done!');
+    .toFile(path.join(SCREENSHOTS_DIR, "dashboard.png"));
+
+  console.log("Done!");
 }
 
 generate().catch(console.error);

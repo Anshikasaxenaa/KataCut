@@ -14,7 +14,54 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "KataCut - Privacy First Subscription Tracking",
-  description: "KataCut - Know where your money goes. Privacy-first subscription tracking.",
+  description:
+    "Upload your bank statement to find and cancel forgotten subscriptions. 100% private, zero-knowledge encryption.",
+  keywords: [
+    "subscription tracker",
+    "personal finance",
+    "privacy",
+    "bank statement parser",
+    "zero knowledge",
+  ],
+  authors: [{ name: "KataCut Team" }],
+  creator: "KataCut Team",
+  openGraph: {
+    title: "KataCut - Privacy First Subscription Tracking",
+    description:
+      "Upload your bank statement to find and cancel forgotten subscriptions. Your data never leaves your device.",
+    url: "https://your-vercel-url.vercel.app",
+    siteName: "KataCut",
+    images: [
+      {
+        url: "/screenshots/dashboard.png",
+        width: 1080,
+        height: 1920,
+        alt: "KataCut Dashboard",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "KataCut - Privacy First Subscription Tracking",
+    description: "Find and cancel forgotten subscriptions with 100% privacy.",
+    images: ["/screenshots/dashboard.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "https://your-vercel-url.vercel.app",
+  },
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -28,6 +75,7 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { Navbar } from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { InstallPrompt } from "@/components/install-prompt";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 export default function RootLayout({
   children,
@@ -50,13 +98,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <InstallPrompt />
-          <AuthProvider>
-            <Navbar />
-            <main className="flex-1">
-              {children}
-            </main>
-          </AuthProvider>
+          <ErrorBoundary>
+            <InstallPrompt />
+            <AuthProvider>
+              <Navbar />
+              <main className="flex-1">{children}</main>
+            </AuthProvider>
+          </ErrorBoundary>
         </ThemeProvider>
       </body>
     </html>

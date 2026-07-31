@@ -11,10 +11,11 @@ export function InstallPrompt() {
 
   useEffect(() => {
     // Check if app is already installed/standalone
-    const isStandalone = window.matchMedia("(display-mode: standalone)").matches || 
-                         (window.navigator as any).standalone || 
-                         document.referrer.includes("android-app://");
-                         
+    const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      (window.navigator as any).standalone ||
+      document.referrer.includes("android-app://");
+
     if (isStandalone) {
       return;
     }
@@ -25,7 +26,7 @@ export function InstallPrompt() {
       const dismissDate = new Date(parseInt(dismissedAt, 10));
       const sevenDaysAgo = new Date();
       sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-      
+
       if (dismissDate > sevenDaysAgo) {
         return; // Don't show if dismissed within last 7 days
       }
@@ -48,9 +49,9 @@ export function InstallPrompt() {
     if (!deferredPrompt) return;
 
     deferredPrompt.prompt();
-    
+
     const { outcome } = await deferredPrompt.userChoice;
-    
+
     if (outcome === "accepted") {
       setShowPrompt(false);
       setDeferredPrompt(null);
@@ -58,7 +59,7 @@ export function InstallPrompt() {
       confetti({
         particleCount: 100,
         spread: 70,
-        origin: { y: 0.2 }
+        origin: { y: 0.2 },
       });
     }
   };
@@ -78,19 +79,24 @@ export function InstallPrompt() {
         </div>
         <div>
           <p className="text-sm font-semibold">Install KataCut</p>
-          <p className="text-xs text-indigo-100 hidden sm:block">Get quick access to your subscriptions from your home screen.</p>
+          <p className="text-xs text-indigo-100 hidden sm:block">
+            Get quick access to your subscriptions from your home screen.
+          </p>
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <Button 
-          size="sm" 
-          variant="secondary" 
+        <Button
+          size="sm"
+          variant="secondary"
           onClick={handleInstall}
           className="bg-white text-indigo-700 hover:bg-zinc-100 h-8 text-xs font-bold"
         >
           Install
         </Button>
-        <button onClick={handleDismiss} className="p-1 hover:bg-indigo-700 rounded-full transition-colors">
+        <button
+          onClick={handleDismiss}
+          className="p-1 hover:bg-indigo-700 rounded-full transition-colors"
+        >
           <X className="w-5 h-5" />
         </button>
       </div>

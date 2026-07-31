@@ -8,7 +8,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export type SortOption = "Name (A-Z)" | "Amount (High to Low)" | "Amount (Low to High)" | "Next Billing";
+export type SortOption =
+  | "Name (A-Z)"
+  | "Amount (High to Low)"
+  | "Amount (Low to High)"
+  | "Next Billing";
 
 interface SortDropdownProps {
   activeSort: SortOption;
@@ -19,7 +23,7 @@ const sortOptions: SortOption[] = [
   "Name (A-Z)",
   "Amount (High to Low)",
   "Amount (Low to High)",
-  "Next Billing"
+  "Next Billing",
 ];
 
 export function SortDropdown({ activeSort, onSortChange }: SortDropdownProps) {
@@ -31,7 +35,10 @@ export function SortDropdown({ activeSort, onSortChange }: SortDropdownProps) {
         <span className="sm:hidden">Sort</span>
         <ChevronDown className="w-4 h-4 opacity-50" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[200px] bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800">
+      <DropdownMenuContent
+        align="end"
+        className="w-[200px] bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+      >
         {sortOptions.map((option) => (
           <DropdownMenuItem
             key={option}
@@ -39,7 +46,9 @@ export function SortDropdown({ activeSort, onSortChange }: SortDropdownProps) {
             className="flex items-center justify-between cursor-pointer focus:bg-zinc-100 dark:focus:bg-zinc-900 text-zinc-900 dark:text-zinc-100"
           >
             {option}
-            {activeSort === option && <Check className="w-4 h-4 text-indigo-500" />}
+            {activeSort === option && (
+              <Check className="w-4 h-4 text-indigo-500" />
+            )}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

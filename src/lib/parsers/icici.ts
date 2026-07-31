@@ -8,11 +8,14 @@ import { normalizeAmount } from "../normalizers/amount";
  */
 export function parseICICI(text: string): RawTransaction[] {
   const transactions: RawTransaction[] = [];
-  const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
+  const lines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
 
   // Matches DD/MM/YYYY or DD-Mon-YYYY
   const dateRegex = /^(\d{2}[\/\-](?:\d{2}|[A-Za-z]{3})[\/\-]\d{4})/;
-  
+
   let currentTransaction: Partial<RawTransaction> | null = null;
   let currentNarration: string[] = [];
 
@@ -41,28 +44,29 @@ export function parseICICI(text: string): RawTransaction[] {
 
       if (amountMatch) {
         currentTransaction.amount = normalizeAmount(amountMatch[1]);
-        currentTransaction.type = amountMatch[2].toLowerCase().includes("cr") ? "credit" : "debit";
+        currentTransaction.type = amountMatch[2].toLowerCase().includes("cr")
+          ? "credit"
+          : "debit";
       } else {
-         // Try finding amounts without suffix
-         const parts = line.split(/\s+/);
-         const amounts = parts.filter(p => /^[\d,]+\.\d{2}$/.test(p));
-         if (amounts.length > 0) {
-             currentTransaction.amount = normalizeAmount(amounts[0]);
-             currentTransaction.type = "debit"; // default
-         }
+        // Try finding amounts without suffix
+        const parts = line.split(/\s+/);
+        const amounts = parts.filter((p) => /^[\d,]+\.\d{2}$/.test(p));
+        if (amounts.length > 0) {
+          currentTransaction.amount = normalizeAmount(amounts[0]);
+          currentTransaction.type = "debit"; // default
+        }
       }
 
       // Extract narration (naive approach: take words between date and amount)
       let narration = line.replace(dateRegex, "").trim();
       if (amountMatch) {
-         narration = narration.replace(amountMatch[0], "").trim();
+        narration = narration.replace(amountMatch[0], "").trim();
       }
-      
+
       // Remove trailing balance if present
       narration = narration.replace(/[\d,]+\.\d{2}$/, "").trim();
-      
-      currentNarration.push(narration);
 
+      currentNarration.push(narration);
     } else if (currentTransaction) {
       // Continuation of narration
       if (!line.includes("Page ") && !line.includes("Opening Balance")) {
@@ -70,11 +74,13 @@ export function parseICICI(text: string): RawTransaction[] {
         const amountRegex = /([\d,]+\.\d{2})\s*(Dr\.|Cr\.|DR|CR)/i;
         const amountMatch = line.match(amountRegex);
         if (amountMatch && currentTransaction.amount === 0) {
-            currentTransaction.amount = normalizeAmount(amountMatch[1]);
-            currentTransaction.type = amountMatch[2].toLowerCase().includes("cr") ? "credit" : "debit";
-            currentNarration.push(line.replace(amountMatch[0], "").trim());
+          currentTransaction.amount = normalizeAmount(amountMatch[1]);
+          currentTransaction.type = amountMatch[2].toLowerCase().includes("cr")
+            ? "credit"
+            : "debit";
+          currentNarration.push(line.replace(amountMatch[0], "").trim());
         } else {
-            currentNarration.push(line);
+          currentNarration.push(line);
         }
       }
     }

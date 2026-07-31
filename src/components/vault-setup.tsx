@@ -5,9 +5,24 @@ import { Vault, bufferToBase64 } from "@/lib/crypto/vault";
 import { validatePassphrase } from "@/lib/crypto/key-derivation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Shield, Lock, Unlock, Check, X, AlertTriangle, Loader2 } from "lucide-react";
+import {
+  Shield,
+  Lock,
+  Unlock,
+  Check,
+  X,
+  AlertTriangle,
+  Loader2,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface VaultSetupProps {
@@ -26,8 +41,9 @@ export function VaultSetup({ onComplete }: VaultSetupProps) {
   const hasNumber = /[0-9]/.test(passphrase);
   const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(passphrase);
   const isMatch = passphrase === confirmPassphrase && passphrase.length > 0;
-  
-  const isValid = hasMinLength && hasNumber && hasSpecial && isMatch && understood;
+
+  const isValid =
+    hasMinLength && hasNumber && hasSpecial && isMatch && understood;
 
   // Strength meter
   let strength = 0;
@@ -36,26 +52,30 @@ export function VaultSetup({ onComplete }: VaultSetupProps) {
   if (hasSpecial) strength += 1;
   if (passphrase.length > 12) strength += 1;
 
-  const strengthColor = 
-    strength <= 1 ? "bg-red-500" :
-    strength === 2 || strength === 3 ? "bg-amber-500" :
-    "bg-emerald-500";
-    
+  const strengthColor =
+    strength <= 1
+      ? "bg-red-500"
+      : strength === 2 || strength === 3
+        ? "bg-amber-500"
+        : "bg-emerald-500";
+
   const strengthLabel =
-    strength <= 1 ? "Weak" :
-    strength === 2 || strength === 3 ? "Strong" :
-    "Very Strong";
+    strength <= 1
+      ? "Weak"
+      : strength === 2 || strength === 3
+        ? "Strong"
+        : "Very Strong";
 
   const handleSetup = async () => {
     if (!isValid) return;
-    
+
     setIsSettingUp(true);
     try {
       // Small delay to allow UI to show loading state (deriving key is CPU intensive)
-      await new Promise(resolve => setTimeout(resolve, 50));
-      
+      await new Promise((resolve) => setTimeout(resolve, 50));
+
       await Vault.setup(passphrase);
-      
+
       // Store salt in localStorage (safe to store openly, needed to derive key again)
       // Note: Vault.setup sets Vault.salt, we need to extract it or we could have setup return it.
       // A cleaner way is to use a constant salt name
@@ -108,43 +128,48 @@ export function VaultSetup({ onComplete }: VaultSetupProps) {
                 )}
               </AnimatePresence>
             </div>
-            <CardTitle className="text-2xl text-zinc-100">Secure Your Vault</CardTitle>
+            <CardTitle className="text-2xl text-zinc-100">
+              Secure Your Vault
+            </CardTitle>
             <CardDescription className="text-zinc-400 mt-2">
-              Your financial data stays on your device, encrypted with a passphrase only you know.
+              Your financial data stays on your device, encrypted with a
+              passphrase only you know.
             </CardDescription>
           </CardHeader>
-          
+
           <CardContent className="space-y-6">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Input 
-                  type="password" 
-                  placeholder="Create a passphrase" 
+                <Input
+                  type="password"
+                  placeholder="Create a passphrase"
                   value={passphrase}
                   onChange={(e) => setPassphrase(e.target.value)}
                   className="bg-zinc-900 border-zinc-800 text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-indigo-500"
                   disabled={isSettingUp || success}
                 />
-                
+
                 {/* Strength Meter */}
                 {passphrase.length > 0 && (
                   <div className="space-y-1">
                     <div className="flex h-1.5 w-full overflow-hidden rounded-full bg-zinc-800">
-                      <div 
-                        className={`h-full transition-all duration-300 ${strengthColor}`} 
+                      <div
+                        className={`h-full transition-all duration-300 ${strengthColor}`}
                         style={{ width: `${(strength / 4) * 100}%` }}
                       />
                     </div>
-                    <p className={`text-xs text-right font-medium ${strengthColor.replace('bg-', 'text-')}`}>
+                    <p
+                      className={`text-xs text-right font-medium ${strengthColor.replace("bg-", "text-")}`}
+                    >
                       {strengthLabel}
                     </p>
                   </div>
                 )}
               </div>
-              
-              <Input 
-                type="password" 
-                placeholder="Confirm passphrase" 
+
+              <Input
+                type="password"
+                placeholder="Confirm passphrase"
                 value={confirmPassphrase}
                 onChange={(e) => setConfirmPassphrase(e.target.value)}
                 className="bg-zinc-900 border-zinc-800 text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-indigo-500"
@@ -154,21 +179,45 @@ export function VaultSetup({ onComplete }: VaultSetupProps) {
 
             {/* Checklist */}
             <div className="space-y-2 text-sm">
-              <div className={`flex items-center gap-2 transition-colors ${hasMinLength ? 'text-emerald-500' : 'text-zinc-500'}`}>
-                {hasMinLength ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
+              <div
+                className={`flex items-center gap-2 transition-colors ${hasMinLength ? "text-emerald-500" : "text-zinc-500"}`}
+              >
+                {hasMinLength ? (
+                  <Check className="w-4 h-4" />
+                ) : (
+                  <X className="w-4 h-4" />
+                )}
                 <span>8+ characters</span>
               </div>
-              <div className={`flex items-center gap-2 transition-colors ${hasNumber ? 'text-emerald-500' : 'text-zinc-500'}`}>
-                {hasNumber ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
+              <div
+                className={`flex items-center gap-2 transition-colors ${hasNumber ? "text-emerald-500" : "text-zinc-500"}`}
+              >
+                {hasNumber ? (
+                  <Check className="w-4 h-4" />
+                ) : (
+                  <X className="w-4 h-4" />
+                )}
                 <span>1+ number</span>
               </div>
-              <div className={`flex items-center gap-2 transition-colors ${hasSpecial ? 'text-emerald-500' : 'text-zinc-500'}`}>
-                {hasSpecial ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
+              <div
+                className={`flex items-center gap-2 transition-colors ${hasSpecial ? "text-emerald-500" : "text-zinc-500"}`}
+              >
+                {hasSpecial ? (
+                  <Check className="w-4 h-4" />
+                ) : (
+                  <X className="w-4 h-4" />
+                )}
                 <span>1+ special character</span>
               </div>
               {confirmPassphrase.length > 0 && (
-                <div className={`flex items-center gap-2 transition-colors ${isMatch ? 'text-emerald-500' : 'text-rose-500'}`}>
-                  {isMatch ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
+                <div
+                  className={`flex items-center gap-2 transition-colors ${isMatch ? "text-emerald-500" : "text-rose-500"}`}
+                >
+                  {isMatch ? (
+                    <Check className="w-4 h-4" />
+                  ) : (
+                    <X className="w-4 h-4" />
+                  )}
                   <span>Passphrases match</span>
                 </div>
               )}
@@ -178,29 +227,34 @@ export function VaultSetup({ onComplete }: VaultSetupProps) {
             <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-md flex items-start gap-3">
               <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
               <p className="text-xs text-rose-400 leading-relaxed">
-                <strong className="font-semibold text-rose-500">This passphrase cannot be recovered.</strong> If forgotten, your data is permanently lost. We have no way to reset it.
+                <strong className="font-semibold text-rose-500">
+                  This passphrase cannot be recovered.
+                </strong>{" "}
+                If forgotten, your data is permanently lost. We have no way to
+                reset it.
               </p>
             </div>
 
             <div className="flex items-start space-x-3 pt-2">
-              <Checkbox 
-                id="understand" 
-                checked={understood} 
+              <Checkbox
+                id="understand"
+                checked={understood}
                 onCheckedChange={(c) => setUnderstood(c === true)}
                 className="mt-1 border-zinc-700 data-[state=checked]:bg-indigo-600 data-[state=checked]:border-indigo-600"
                 disabled={isSettingUp || success}
               />
-              <label 
-                htmlFor="understand" 
+              <label
+                htmlFor="understand"
                 className="text-sm text-zinc-400 font-medium leading-tight cursor-pointer"
               >
-                I understand that losing this passphrase means losing access to my data.
+                I understand that losing this passphrase means losing access to
+                my data.
               </label>
             </div>
           </CardContent>
           <CardFooter>
-            <Button 
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white disabled:bg-zinc-800 disabled:text-zinc-500" 
+            <Button
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white disabled:bg-zinc-800 disabled:text-zinc-500"
               disabled={!isValid || isSettingUp || success}
               onClick={handleSetup}
             >

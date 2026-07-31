@@ -3,7 +3,13 @@
 import { useState, useEffect, useMemo } from "react";
 import { AuthGuard } from "@/components/auth-guard";
 import { useAuth } from "@/hooks/use-auth";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { parseTransactions, detectBank } from "@/lib/parsers";
 import { NormalizedTransaction } from "@/lib/types/transaction";
 import { Subscription, SubscriptionSummary } from "@/lib/types/subscription";
@@ -21,7 +27,16 @@ import { BottomNav } from "@/components/bottom-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { AlertCircle, FileText, MessageSquare, Search, Loader2, Bell, BellOff, RefreshCw } from "lucide-react";
+import {
+  AlertCircle,
+  FileText,
+  MessageSquare,
+  Search,
+  Loader2,
+  Bell,
+  BellOff,
+  RefreshCw,
+} from "lucide-react";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 
 // Crypto & Storage
@@ -36,18 +51,20 @@ export default function DashboardPage() {
   const [extractedPdfText, setExtractedPdfText] = useState("");
   const [transactions, setTransactions] = useState<NormalizedTransaction[]>([]);
   const [detectedBank, setDetectedBank] = useState<string>("unknown");
-  
+
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-  const [subSummary, setSubSummary] = useState<SubscriptionSummary | null>(null);
+  const [subSummary, setSubSummary] = useState<SubscriptionSummary | null>(
+    null,
+  );
   const [isProcessing, setIsProcessing] = useState(false);
-  
+
   // UI State
   const [activeFilter, setActiveFilter] = useState<FilterOption>("All");
   const [activeSort, setActiveSort] = useState<SortOption>("Name (A-Z)");
   const [searchQuery, setSearchQuery] = useState("");
   const [showUpload, setShowUpload] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-  
+
   // PWA & Mobile Features
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -64,16 +81,18 @@ export default function DashboardPage() {
       alert("This browser does not support notifications.");
       return;
     }
-    
+
     if (Notification.permission === "granted") {
-      alert("Notifications are already enabled! To disable, please use your browser settings.");
+      alert(
+        "Notifications are already enabled! To disable, please use your browser settings.",
+      );
     } else if (Notification.permission !== "denied") {
       const permission = await Notification.requestPermission();
       setNotificationsEnabled(permission === "granted");
       if (permission === "granted") {
         new Notification("KataCut", {
           body: "You will now receive alerts for upcoming renewals and savings!",
-          icon: "/icons/icon-192x192.png"
+          icon: "/icons/icon-192x192.png",
         });
       }
     } else {
@@ -84,13 +103,19 @@ export default function DashboardPage() {
   const handleRefresh = async () => {
     if (isRefreshing) return;
     setIsRefreshing(true);
-    await refreshControls.start({ y: 60, transition: { type: "spring", stiffness: 300, damping: 20 } });
-    
+    await refreshControls.start({
+      y: 60,
+      transition: { type: "spring", stiffness: 300, damping: 20 },
+    });
+
     // Simulate refresh delay
     setTimeout(async () => {
       setLastUpdated(new Date());
       setIsRefreshing(false);
-      await refreshControls.start({ y: 0, transition: { type: "spring", stiffness: 300, damping: 20 } });
+      await refreshControls.start({
+        y: 0,
+        transition: { type: "spring", stiffness: 300, damping: 20 },
+      });
     }, 1500);
   };
 
@@ -123,37 +148,37 @@ export default function DashboardPage() {
   // Load Data on Unlock
   useEffect(() => {
     if (!isVaultLocked && !isVaultChecking) {
-      loadData<NormalizedTransaction[]>("transactions", "all").then(data => {
+      loadData<NormalizedTransaction[]>("transactions", "all").then((data) => {
         if (data) {
           setTransactions(data);
         }
       });
     }
   }, [isVaultLocked, isVaultChecking]);
-  
+
   useEffect(() => {
     if (extractedPdfText) {
       setIsProcessing(true);
       const bank = detectBank(extractedPdfText);
       setDetectedBank(bank);
       const parsed = parseTransactions(extractedPdfText, "pdf");
-      
-      setTransactions(prev => {
-        const smsTx = prev.filter(t => t.source === "sms");
+
+      setTransactions((prev) => {
+        const smsTx = prev.filter((t) => t.source === "sms");
         const newTxs = [...parsed, ...smsTx];
         // Encrypt and save to IndexedDB
         saveData("transactions", "all", newTxs).catch(console.error);
         return newTxs;
       });
     } else {
-       setTransactions(prev => prev.filter(t => t.source === "sms"));
+      setTransactions((prev) => prev.filter((t) => t.source === "sms"));
     }
   }, [extractedPdfText]);
 
   const handleSmsParse = (smsText: string) => {
     setIsProcessing(true);
     const parsedSms = parseTransactions(smsText, "sms");
-    setTransactions(prev => {
+    setTransactions((prev) => {
       const newTxs = [...prev, ...parsedSms];
       // Encrypt and save to IndexedDB
       saveData("transactions", "all", newTxs).catch(console.error);
@@ -183,20 +208,23 @@ export default function DashboardPage() {
   // Derived state for filtering and sorting
   const filteredAndSortedSubs = useMemo(() => {
     let result = [...subscriptions];
-    
+
     // Search
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      result = result.filter(s => s.merchant.toLowerCase().includes(q));
+      result = result.filter((s) => s.merchant.toLowerCase().includes(q));
     }
-    
+
     // Filter
     if (activeFilter !== "All") {
-      if (activeFilter === "Active") result = result.filter(s => s.status === "active");
-      if (activeFilter === "Dormant") result = result.filter(s => s.status === "dormant");
-      if (activeFilter === "Expiring Soon") result = result.filter(s => s.status === "expiring_soon");
+      if (activeFilter === "Active")
+        result = result.filter((s) => s.status === "active");
+      if (activeFilter === "Dormant")
+        result = result.filter((s) => s.status === "dormant");
+      if (activeFilter === "Expiring Soon")
+        result = result.filter((s) => s.status === "expiring_soon");
     }
-    
+
     // Sort
     result.sort((a, b) => {
       switch (activeSort) {
@@ -214,26 +242,44 @@ export default function DashboardPage() {
           return 0;
       }
     });
-    
+
     return result;
   }, [subscriptions, activeFilter, activeSort, searchQuery]);
 
   const filterOptions = [
     { label: "All" as FilterOption, count: subscriptions.length },
-    { label: "Active" as FilterOption, count: subscriptions.filter(s => s.status === "active").length },
-    { label: "Dormant" as FilterOption, count: subscriptions.filter(s => s.status === "dormant").length },
-    { label: "Expiring Soon" as FilterOption, count: subscriptions.filter(s => s.status === "expiring_soon").length },
+    {
+      label: "Active" as FilterOption,
+      count: subscriptions.filter((s) => s.status === "active").length,
+    },
+    {
+      label: "Dormant" as FilterOption,
+      count: subscriptions.filter((s) => s.status === "dormant").length,
+    },
+    {
+      label: "Expiring Soon" as FilterOption,
+      count: subscriptions.filter((s) => s.status === "expiring_soon").length,
+    },
   ];
 
-  const confidenceScore = transactions.length > 0 
-    ? transactions.reduce((acc, t) => acc + t.confidence, 0) / transactions.length 
-    : 1;
-    
-  const bankDisplayName = detectedBank === "hdfc" ? "HDFC Bank Statement" : 
-                          detectedBank === "icici" ? "ICICI Bank Statement" : "Unknown Format";
+  const confidenceScore =
+    transactions.length > 0
+      ? transactions.reduce((acc, t) => acc + t.confidence, 0) /
+        transactions.length
+      : 1;
 
-  const firstName = user?.email?.split('@')[0] || "User";
-  const formattedTime = lastUpdated.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  const bankDisplayName =
+    detectedBank === "hdfc"
+      ? "HDFC Bank Statement"
+      : detectedBank === "icici"
+        ? "ICICI Bank Statement"
+        : "Unknown Format";
+
+  const firstName = user?.email?.split("@")[0] || "User";
+  const formattedTime = lastUpdated.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  });
 
   // Render Lock/Setup screens if vault is not ready
   if (isVaultChecking) {
@@ -245,27 +291,33 @@ export default function DashboardPage() {
   }
 
   if (!vaultSalt) {
-    return <VaultSetup onComplete={() => {
-      setVaultSalt(localStorage.getItem("katacut-vault-salt"));
-      setIsVaultLocked(Vault.isLocked());
-    }} />;
+    return (
+      <VaultSetup
+        onComplete={() => {
+          setVaultSalt(localStorage.getItem("katacut-vault-salt"));
+          setIsVaultLocked(Vault.isLocked());
+        }}
+      />
+    );
   }
 
   if (isVaultLocked) {
-    return <VaultLockScreen 
-      saltBase64={vaultSalt} 
-      onUnlock={() => setIsVaultLocked(false)} 
-      onReset={() => {
-        setVaultSalt(null);
-        setTransactions([]);
-        setSubscriptions([]);
-      }} 
-    />;
+    return (
+      <VaultLockScreen
+        saltBase64={vaultSalt}
+        onUnlock={() => setIsVaultLocked(false)}
+        onReset={() => {
+          setVaultSalt(null);
+          setTransactions([]);
+          setSubscriptions([]);
+        }}
+      />
+    );
   }
 
   return (
     <AuthGuard>
-      <motion.div 
+      <motion.div
         animate={refreshControls}
         drag="y"
         dragConstraints={{ top: 0, bottom: 0 }}
@@ -285,38 +337,59 @@ export default function DashboardPage() {
           </div>
         )}
         <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-          
           {/* TOP BAR */}
           <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
-              <motion.h1 
+              <motion.h1
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 className="text-3xl font-bold tracking-tight"
               >
-                Hello, <span className="text-indigo-600 dark:text-indigo-400 capitalize">{firstName}</span>
+                Hello,{" "}
+                <span className="text-indigo-600 dark:text-indigo-400 capitalize">
+                  {firstName}
+                </span>
               </motion.h1>
               <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
                 Last updated today at {formattedTime}
               </p>
             </div>
-            
+
             <div className="flex items-center gap-3">
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={handleToggleNotifications}
-                className={notificationsEnabled ? "text-emerald-600" : "text-zinc-400"}
-                title={notificationsEnabled ? "Notifications enabled" : "Enable notifications"}
+                className={
+                  notificationsEnabled ? "text-emerald-600" : "text-zinc-400"
+                }
+                title={
+                  notificationsEnabled
+                    ? "Notifications enabled"
+                    : "Enable notifications"
+                }
               >
-                {notificationsEnabled ? <Bell className="w-4 h-4" /> : <BellOff className="w-4 h-4" />}
+                {notificationsEnabled ? (
+                  <Bell className="w-4 h-4" />
+                ) : (
+                  <BellOff className="w-4 h-4" />
+                )}
               </Button>
               <EncryptionIndicator />
-              <Button variant="outline" size="sm" onClick={() => setShowUpload(!showUpload)} className="hidden sm:flex bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-sm">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowUpload(!showUpload)}
+                className="hidden sm:flex bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-sm"
+              >
                 <FileText className="w-4 h-4 mr-2" />
                 Upload Statement
               </Button>
-              <Button size="sm" onClick={() => setShowUpload(!showUpload)} className="hidden sm:flex bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+              <Button
+                size="sm"
+                onClick={() => setShowUpload(!showUpload)}
+                className="hidden sm:flex bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
+              >
                 <MessageSquare className="w-4 h-4 mr-2" />
                 Paste SMS
               </Button>
@@ -335,8 +408,12 @@ export default function DashboardPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2 pb-6 border-b border-zinc-200 dark:border-zinc-800/50">
                   <Card className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-sm">
                     <CardHeader>
-                      <CardTitle className="text-lg">PDF Statement Parsing (Mock)</CardTitle>
-                      <CardDescription>Paste your extracted PDF text to test.</CardDescription>
+                      <CardTitle className="text-lg">
+                        PDF Statement Parsing (Mock)
+                      </CardTitle>
+                      <CardDescription>
+                        Paste your extracted PDF text to test.
+                      </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <textarea
@@ -360,10 +437,10 @@ export default function DashboardPage() {
             <section>
               <h2 className="sr-only">Statistics</h2>
               {isProcessing && !subSummary ? (
-                 <div className="h-[120px] rounded-xl border border-dashed border-zinc-300 dark:border-zinc-800 flex items-center justify-center text-zinc-500">
-                    <Loader2 className="w-6 h-6 animate-spin mr-2" />
-                    Analyzing transactions...
-                 </div>
+                <div className="h-[120px] rounded-xl border border-dashed border-zinc-300 dark:border-zinc-800 flex items-center justify-center text-zinc-500">
+                  <Loader2 className="w-6 h-6 animate-spin mr-2" />
+                  Analyzing transactions...
+                </div>
               ) : (
                 subSummary && <StatsCards summary={subSummary} />
               )}
@@ -376,42 +453,50 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between mb-6">
                 <TabsList className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
                   <TabsTrigger value="active">Active & Dormant</TabsTrigger>
-                  <TabsTrigger value="cancelled">Cancellation History</TabsTrigger>
+                  <TabsTrigger value="cancelled">
+                    Cancellation History
+                  </TabsTrigger>
                 </TabsList>
               </div>
 
-              <TabsContent value="active" className="space-y-6 mt-0 focus-visible:outline-none focus-visible:ring-0">
+              <TabsContent
+                value="active"
+                className="space-y-6 mt-0 focus-visible:outline-none focus-visible:ring-0"
+              >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <FilterBar 
-                    options={filterOptions} 
-                    activeFilter={activeFilter} 
-                    onFilterChange={setActiveFilter} 
+                  <FilterBar
+                    options={filterOptions}
+                    activeFilter={activeFilter}
+                    onFilterChange={setActiveFilter}
                   />
-                  
+
                   <div className="flex items-center gap-3 w-full sm:w-auto">
                     <div className="relative w-full sm:w-64">
                       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-400" />
-                      <Input 
+                      <Input
                         placeholder="Search subscriptions..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="pl-9 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-indigo-500 h-9"
                       />
                     </div>
-                    <SortDropdown 
+                    <SortDropdown
                       activeSort={activeSort}
                       onSortChange={setActiveSort}
                     />
                   </div>
                 </div>
 
-                <SubscriptionGrid 
-                  subscriptions={filteredAndSortedSubs} 
-                  isLoading={isProcessing} 
+                <SubscriptionGrid
+                  subscriptions={filteredAndSortedSubs}
+                  isLoading={isProcessing}
                 />
               </TabsContent>
 
-              <TabsContent value="cancelled" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+              <TabsContent
+                value="cancelled"
+                className="mt-0 focus-visible:outline-none focus-visible:ring-0"
+              >
                 <CancellationHistory />
               </TabsContent>
             </Tabs>
@@ -427,9 +512,12 @@ export default function DashboardPage() {
                     {transactions.length} transactions processed.
                   </p>
                 </div>
-                
+
                 {extractedPdfText && (
-                  <Badge variant="outline" className={`px-3 py-1 ${detectedBank === 'unknown' ? 'border-amber-500 text-amber-600 bg-amber-50 dark:border-amber-500/30 dark:text-amber-500 dark:bg-amber-500/10' : 'border-indigo-200 text-indigo-700 bg-indigo-50 dark:border-indigo-500/30 dark:text-indigo-400 dark:bg-indigo-500/10'}`}>
+                  <Badge
+                    variant="outline"
+                    className={`px-3 py-1 ${detectedBank === "unknown" ? "border-amber-500 text-amber-600 bg-amber-50 dark:border-amber-500/30 dark:text-amber-500 dark:bg-amber-500/10" : "border-indigo-200 text-indigo-700 bg-indigo-50 dark:border-indigo-500/30 dark:text-indigo-400 dark:bg-indigo-500/10"}`}
+                  >
                     Detected: {bankDisplayName}
                   </Badge>
                 )}
@@ -438,7 +526,11 @@ export default function DashboardPage() {
               {confidenceScore < 0.7 && (
                 <div className="flex items-center gap-3 p-4 rounded-lg bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-amber-700 dark:text-amber-500 mb-6">
                   <AlertCircle className="h-5 w-5 shrink-0" />
-                  <p className="text-sm">We had some trouble parsing this statement format. Some transactions or amounts might be inaccurate. Please verify manually.</p>
+                  <p className="text-sm">
+                    We had some trouble parsing this statement format. Some
+                    transactions or amounts might be inaccurate. Please verify
+                    manually.
+                  </p>
                 </div>
               )}
 

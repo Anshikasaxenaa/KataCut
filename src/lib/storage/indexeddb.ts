@@ -1,6 +1,6 @@
 /**
  * indexeddb.ts
- * 
+ *
  * Provides a Promise-based wrapper around the native IndexedDB API.
  * Handles the secure storage and retrieval of data by piping everything
  * through the Vault for encryption before it hits the disk.
@@ -11,8 +11,14 @@ import { Vault, EncryptedBlob } from "../crypto/vault";
 const DB_NAME = "katacut-vault";
 const DB_VERSION = 1;
 
-export type StoreName = "transactions" | "subscriptions" | "preferences" | "metadata";
-const STORES: StoreName[] = ["transactions", "subscriptions", "preferences", "metadata"];
+export type StoreName =
+  "transactions" | "subscriptions" | "preferences" | "metadata";
+const STORES: StoreName[] = [
+  "transactions",
+  "subscriptions",
+  "preferences",
+  "metadata",
+];
 
 let dbPromise: Promise<IDBDatabase> | null = null;
 
@@ -26,9 +32,9 @@ function getDB(): Promise<IDBDatabase> {
 
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
-        
+
         // Create object stores if they don't exist
-        STORES.forEach(storeName => {
+        STORES.forEach((storeName) => {
           if (!db.objectStoreNames.contains(storeName)) {
             db.createObjectStore(storeName);
           }
@@ -40,7 +46,10 @@ function getDB(): Promise<IDBDatabase> {
       };
 
       request.onerror = (event) => {
-        console.error("IndexedDB initialization error:", (event.target as IDBOpenDBRequest).error);
+        console.error(
+          "IndexedDB initialization error:",
+          (event.target as IDBOpenDBRequest).error,
+        );
         reject((event.target as IDBOpenDBRequest).error);
       };
     });
@@ -51,10 +60,14 @@ function getDB(): Promise<IDBDatabase> {
 /**
  * Encrypts and saves data to a specific store.
  */
-export async function saveData<T>(storeName: StoreName, key: string, data: T): Promise<void> {
+export async function saveData<T>(
+  storeName: StoreName,
+  key: string,
+  data: T,
+): Promise<void> {
   const sealedData = await Vault.seal(data);
   const db = await getDB();
-  
+
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(storeName, "readwrite");
     const store = transaction.objectStore(storeName);
@@ -69,9 +82,12 @@ export async function saveData<T>(storeName: StoreName, key: string, data: T): P
  * Loads and decrypts data from a specific store.
  * Returns null if the key is not found.
  */
-export async function loadData<T>(storeName: StoreName, key: string): Promise<T | null> {
+export async function loadData<T>(
+  storeName: StoreName,
+  key: string,
+): Promise<T | null> {
   const db = await getDB();
-  
+
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(storeName, "readonly");
     const store = transaction.objectStore(storeName);
@@ -83,12 +99,15 @@ export async function loadData<T>(storeName: StoreName, key: string): Promise<T 
         resolve(null);
         return;
       }
-      
+
       try {
         const unsealedData = await Vault.unseal<T>(result);
         resolve(unsealedData);
       } catch (error) {
-        console.error(`Failed to unseal data for key: ${key} in store: ${storeName}`, error);
+        console.error(
+          `Failed to unseal data for key: ${key} in store: ${storeName}`,
+          error,
+        );
         reject(error);
       }
     };
@@ -100,9 +119,12 @@ export async function loadData<T>(storeName: StoreName, key: string): Promise<T 
 /**
  * Deletes a specific key from a store.
  */
-export async function deleteData(storeName: StoreName, key: string): Promise<void> {
+export async function deleteData(
+  storeName: StoreName,
+  key: string,
+): Promise<void> {
   const db = await getDB();
-  
+
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(storeName, "readwrite");
     const store = transaction.objectStore(storeName);
@@ -118,8 +140,8 @@ export async function deleteData(storeName: StoreName, key: string): Promise<voi
  */
 export async function clearAll(): Promise<void> {
   const db = await getDB();
-  
-  const promises = STORES.map(storeName => {
+
+  const promises = STORES.map((storeName) => {
     return new Promise<void>((resolve, reject) => {
       const transaction = db.transaction(storeName, "readwrite");
       const store = transaction.objectStore(storeName);

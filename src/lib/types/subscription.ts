@@ -1,7 +1,9 @@
 import { NormalizedTransaction } from "./transaction";
 
-export type SubscriptionFrequency = 'monthly' | 'yearly' | 'quarterly' | 'weekly' | 'unknown';
-export type SubscriptionStatus = 'active' | 'dormant' | 'expiring_soon' | 'cancelled';
+export type SubscriptionFrequency =
+  "monthly" | "yearly" | "quarterly" | "weekly" | "unknown";
+export type SubscriptionStatus =
+  "active" | "dormant" | "expiring_soon" | "cancelled";
 
 export interface Subscription {
   id: string;

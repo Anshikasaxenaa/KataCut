@@ -4,8 +4,8 @@ import { NormalizedTransaction } from "../types/transaction";
  * Calculates Levenshtein distance between two strings
  */
 function levenshtein(a: string, b: string): number {
-  const matrix = Array.from({ length: a.length + 1 }, () => 
-    new Array(b.length + 1).fill(0)
+  const matrix = Array.from({ length: a.length + 1 }, () =>
+    new Array(b.length + 1).fill(0),
   );
 
   for (let i = 0; i <= a.length; i++) {
@@ -22,8 +22,8 @@ function levenshtein(a: string, b: string): number {
       } else {
         matrix[i][j] = Math.min(
           matrix[i - 1][j - 1] + 1, // substitution
-          matrix[i][j - 1] + 1,     // insertion
-          matrix[i - 1][j] + 1      // deletion
+          matrix[i][j - 1] + 1, // insertion
+          matrix[i - 1][j] + 1, // deletion
         );
       }
     }
@@ -37,18 +37,27 @@ function levenshtein(a: string, b: string): number {
  */
 function aggressiveNormalize(name: string): string {
   let normalized = name.toLowerCase();
-  
+
   // Remove special chars
   normalized = normalized.replace(/[^a-z0-9\s]/g, " ");
-  
+
   // Remove common suffixes
-  const suffixes = [" com", " inc", " ltd", " pvt", " private", " limited", " llc", " co"];
+  const suffixes = [
+    " com",
+    " inc",
+    " ltd",
+    " pvt",
+    " private",
+    " limited",
+    " llc",
+    " co",
+  ];
   for (const suffix of suffixes) {
     if (normalized.endsWith(suffix)) {
       normalized = normalized.slice(0, -suffix.length);
     }
   }
-  
+
   // Condense spaces
   return normalized.replace(/\s+/g, " ").trim();
 }
@@ -57,12 +66,14 @@ function aggressiveNormalize(name: string): string {
  * Groups transactions by merchant using fuzzy matching
  * Minimum 2 transactions per group
  */
-export function groupByMerchant(transactions: NormalizedTransaction[]): Record<string, NormalizedTransaction[]> {
+export function groupByMerchant(
+  transactions: NormalizedTransaction[],
+): Record<string, NormalizedTransaction[]> {
   const groups: Record<string, NormalizedTransaction[]> = {};
-  
+
   // Base map of original merchant name to aggressive normalized form
   const normalizedNames = new Map<string, string>();
-  transactions.forEach(t => {
+  transactions.forEach((t) => {
     normalizedNames.set(t.merchant, aggressiveNormalize(t.merchant));
   });
 
@@ -71,24 +82,29 @@ export function groupByMerchant(transactions: NormalizedTransaction[]): Record<s
     if (t.type !== "debit") continue;
 
     const normT = normalizedNames.get(t.merchant) || "";
-    
+
     // Hardcoded rules as requested
     // "AMAZON PRIME VIDEO" and "AMAZON" → separate. "GOOGLE YOUTUBE" and "GOOGLE PLAY" → separate
     let matchedGroup: string | null = null;
-    
+
     for (const groupName of Object.keys(groups)) {
       const normGroup = aggressiveNormalize(groupName);
-      
+
       // If one is Amazon Prime and the other is Amazon, don't group
-      if ((normT.includes("amazon prime") && normGroup === "amazon") || 
-          (normGroup.includes("amazon prime") && normT === "amazon")) {
-         continue;
+      if (
+        (normT.includes("amazon prime") && normGroup === "amazon") ||
+        (normGroup.includes("amazon prime") && normT === "amazon")
+      ) {
+        continue;
       }
-      
+
       // If one is Google Youtube and the other is Google Play, don't group
-      if ((normT.includes("google youtube") && normGroup.includes("google play")) ||
-          (normGroup.includes("google youtube") && normT.includes("google play"))) {
-         continue;
+      if (
+        (normT.includes("google youtube") &&
+          normGroup.includes("google play")) ||
+        (normGroup.includes("google youtube") && normT.includes("google play"))
+      ) {
+        continue;
       }
 
       // Exact match after normalization (e.g. NETFLIX.COM and NETFLIX)
@@ -96,7 +112,7 @@ export function groupByMerchant(transactions: NormalizedTransaction[]): Record<s
         matchedGroup = groupName;
         break;
       }
-      
+
       // Fuzzy match using Levenshtein distance
       // Allow max distance of 2 for strings > 5 chars
       if (normT.length > 5 && normGroup.length > 5) {
@@ -106,11 +122,14 @@ export function groupByMerchant(transactions: NormalizedTransaction[]): Record<s
           break;
         }
       }
-      
+
       // Inclusion match (if one strictly contains the other and length diff is small)
-      if ((normT.includes(normGroup) || normGroup.includes(normT)) && Math.abs(normT.length - normGroup.length) <= 4) {
-          matchedGroup = groupName;
-          break;
+      if (
+        (normT.includes(normGroup) || normGroup.includes(normT)) &&
+        Math.abs(normT.length - normGroup.length) <= 4
+      ) {
+        matchedGroup = groupName;
+        break;
       }
     }
 

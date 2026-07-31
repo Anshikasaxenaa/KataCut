@@ -5,7 +5,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const connectionString = process.env.DATABASE_URL || "postgres://localhost:5432/katacut";
+const connectionString =
+  process.env.DATABASE_URL || "postgres://localhost:5432/katacut";
 
 const client = postgres(connectionString);
 export const db = drizzle(client, { schema });

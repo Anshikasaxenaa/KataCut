@@ -25,7 +25,7 @@ export const api = {
 
 async function request(endpoint: string, options: RequestInit) {
   const token = localStorage.getItem("token");
-  
+
   const headers = new Headers(options.headers);
   if (token) {
     headers.set("Authorization", `Bearer ${token}`);
@@ -38,7 +38,10 @@ async function request(endpoint: string, options: RequestInit) {
 
   if (response.status === 401) {
     localStorage.removeItem("token");
-    if (typeof window !== "undefined" && !window.location.pathname.startsWith("/login")) {
+    if (
+      typeof window !== "undefined" &&
+      !window.location.pathname.startsWith("/login")
+    ) {
       window.location.href = "/login";
     }
   }

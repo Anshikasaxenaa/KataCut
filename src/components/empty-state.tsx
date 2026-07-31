@@ -10,7 +10,12 @@ interface EmptyStateProps {
   action?: ReactNode;
 }
 
-export function EmptyState({ icon, title, description, action }: EmptyStateProps) {
+export function EmptyState({
+  icon,
+  title,
+  description,
+  action,
+}: EmptyStateProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -27,20 +32,39 @@ export function EmptyState({ icon, title, description, action }: EmptyStateProps
       <p className="text-zinc-500 dark:text-zinc-400 max-w-md text-base leading-relaxed mb-8">
         {description}
       </p>
-      
+
       {action && (
         <div className="relative">
           {action}
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 1, duration: 0.5 }}
             className="absolute -left-12 -top-8 hidden md:block"
           >
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-indigo-500/50">
-              <path d="M35 5C25 5 15 15 15 25" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeDasharray="4 4" />
-              <path d="M10 20L15 25L20 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 40 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="text-indigo-500/50"
+            >
+              <path
+                d="M35 5C25 5 15 15 15 25"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="4 4"
+              />
+              <path
+                d="M10 20L15 25L20 20"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </motion.div>
         </div>

@@ -8,23 +8,31 @@ export default function OfflinePage() {
       <div className="w-20 h-20 bg-zinc-200 dark:bg-zinc-800 rounded-full flex items-center justify-center mb-6">
         <CloudOff className="w-10 h-10 text-zinc-500" />
       </div>
-      
+
       <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 mb-2">
         You're offline
       </h1>
-      
+
       <p className="text-zinc-500 dark:text-zinc-400 max-w-md mb-8 leading-relaxed">
-        Don't worry, your data is safe on your device. KataCut's privacy-first vault works completely offline. 
-        Connect to the internet to upload new statements or cancel subscriptions.
+        Don't worry, your data is safe on your device. KataCut's privacy-first
+        vault works completely offline. Connect to the internet to upload new
+        statements or cancel subscriptions.
       </p>
 
       <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-        <Button asChild size="lg" className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white">
-          <Link href="/dashboard">
-            View Offline Dashboard
-          </Link>
+        <Button
+          asChild
+          size="lg"
+          className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white"
+        >
+          <Link href="/dashboard">View Offline Dashboard</Link>
         </Button>
-        <Button variant="outline" size="lg" className="w-full sm:w-auto" onClick={() => window.location.reload()}>
+        <Button
+          variant="outline"
+          size="lg"
+          className="w-full sm:w-auto"
+          onClick={() => window.location.reload()}
+        >
           Try Again
         </Button>
       </div>

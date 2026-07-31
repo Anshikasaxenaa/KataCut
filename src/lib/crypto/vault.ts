@@ -1,6 +1,6 @@
 /**
  * vault.ts
- * 
+ *
  * Manages the active encryption key in memory and provides high-level
  * methods to seal and unseal JavaScript objects securely.
  */
@@ -9,15 +9,15 @@ import { deriveKey } from "./key-derivation";
 import { encrypt, decrypt } from "./encryption";
 
 export interface EncryptedBlob {
-  salt: string;       // base64 encoded salt
-  iv: string;         // base64 encoded initialization vector
+  salt: string; // base64 encoded salt
+  iv: string; // base64 encoded initialization vector
   ciphertext: string; // base64 encoded ciphertext
-  version: number;    // format version
+  version: number; // format version
 }
 
 // Helper: Convert ArrayBuffer/Uint8Array to Base64 string
 export function bufferToBase64(buffer: ArrayBuffer | Uint8Array): string {
-  let binary = '';
+  let binary = "";
   const bytes = new Uint8Array(buffer);
   const len = bytes.byteLength;
   // Note: For very large buffers, String.fromCharCode.apply can exceed max call stack.
@@ -68,16 +68,16 @@ class VaultManager {
 
   private notifyListeners() {
     const locked = this.isLocked();
-    this.listeners.forEach(listener => listener(locked));
+    this.listeners.forEach((listener) => listener(locked));
   }
 
   private resetAutoLockTimer() {
     if (!this.key) return; // Only run timer if vault is unlocked
-    
+
     if (this.autoLockTimer) {
       clearTimeout(this.autoLockTimer);
     }
-    
+
     this.autoLockTimer = setTimeout(() => {
       this.lock();
     }, AUTO_LOCK_TIMEOUT_MS);
@@ -97,11 +97,14 @@ class VaultManager {
   /**
    * Unlocks the vault using the stored salt and a passphrase.
    */
-  public async unlock(passphrase: string, storedSaltBase64: string): Promise<boolean> {
+  public async unlock(
+    passphrase: string,
+    storedSaltBase64: string,
+  ): Promise<boolean> {
     try {
       const storedSalt = base64ToBuffer(storedSaltBase64);
       const { key } = await deriveKey(passphrase, storedSalt);
-      
+
       // We don't technically know if the key is correct until we decrypt something.
       // But we will load it into memory. Incorrect keys will throw during `unseal`.
       this.key = key;
@@ -151,7 +154,7 @@ class VaultManager {
       salt: bufferToBase64(this.salt),
       iv: bufferToBase64(iv),
       ciphertext: bufferToBase64(ciphertext),
-      version: 1
+      version: 1,
     };
   }
 

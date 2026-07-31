@@ -12,7 +12,9 @@ const router = Router();
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 5, // Limit each IP to 5 login requests per windowMs
-  message: { error: "Too many login attempts. Please try again after 15 minutes." },
+  message: {
+    error: "Too many login attempts. Please try again after 15 minutes.",
+  },
 });
 
 router.post("/register", async (req: Request, res: Response) => {
@@ -24,7 +26,9 @@ router.post("/register", async (req: Request, res: Response) => {
       return;
     }
     if (password.length < 8) {
-      res.status(400).json({ error: "Password must be at least 8 characters long." });
+      res
+        .status(400)
+        .json({ error: "Password must be at least 8 characters long." });
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -33,7 +37,10 @@ router.post("/register", async (req: Request, res: Response) => {
       return;
     }
 
-    const existingUser = await db.select().from(users).where(eq(users.email, email));
+    const existingUser = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email));
     if (existingUser.length > 0) {
       res.status(409).json({ error: "Email already exists." });
       return;
@@ -42,10 +49,13 @@ router.post("/register", async (req: Request, res: Response) => {
     const salt = await bcrypt.genSalt(12);
     const passwordHash = await bcrypt.hash(password, salt);
 
-    const newUser = await db.insert(users).values({
-      email,
-      passwordHash,
-    }).returning({ id: users.id, email: users.email });
+    const newUser = await db
+      .insert(users)
+      .values({
+        email,
+        passwordHash,
+      })
+      .returning({ id: users.id, email: users.email });
 
     const token = generateToken(newUser[0].id);
 
@@ -65,7 +75,10 @@ router.post("/login", loginLimiter, async (req: Request, res: Response) => {
       return;
     }
 
-    const foundUsers = await db.select().from(users).where(eq(users.email, email));
+    const foundUsers = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email));
     if (foundUsers.length === 0) {
       res.status(401).json({ error: "Invalid email or password." });
       return;
@@ -87,30 +100,37 @@ router.post("/login", loginLimiter, async (req: Request, res: Response) => {
   }
 });
 
-router.get("/me", authenticateToken, async (req: AuthRequest, res: Response) => {
-  try {
-    if (!req.userId) {
-      res.status(401).json({ error: "Unauthorized." });
-      return;
+router.get(
+  "/me",
+  authenticateToken,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      if (!req.userId) {
+        res.status(401).json({ error: "Unauthorized." });
+        return;
+      }
+
+      const foundUsers = await db
+        .select({
+          id: users.id,
+          email: users.email,
+          createdAt: users.createdAt,
+        })
+        .from(users)
+        .where(eq(users.id, req.userId));
+
+      if (foundUsers.length === 0) {
+        res.status(404).json({ error: "User not found." });
+        return;
+      }
+
+      res.json({ user: foundUsers[0] });
+    } catch (error) {
+      console.error("Fetch user error:", error);
+      res.status(500).json({ error: "Internal server error." });
     }
-
-    const foundUsers = await db.select({
-      id: users.id,
-      email: users.email,
-      createdAt: users.createdAt,
-    }).from(users).where(eq(users.id, req.userId));
-
-    if (foundUsers.length === 0) {
-      res.status(404).json({ error: "User not found." });
-      return;
-    }
-
-    res.json({ user: foundUsers[0] });
-  } catch (error) {
-    console.error("Fetch user error:", error);
-    res.status(500).json({ error: "Internal server error." });
-  }
-});
+  },
+);
 
 router.post("/logout", (req: Request, res: Response) => {
   res.json({ success: true, message: "Logged out successfully." });

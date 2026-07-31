@@ -10,7 +10,10 @@ interface CancelButtonProps {
   isDormant?: boolean;
 }
 
-export function CancelButton({ subscription, isDormant = false }: CancelButtonProps) {
+export function CancelButton({
+  subscription,
+  isDormant = false,
+}: CancelButtonProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (

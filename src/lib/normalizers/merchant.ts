@@ -1,27 +1,27 @@
 export const KNOWN_MERCHANTS: Record<string, string> = {
   "NETFLIX.COM": "Netflix",
-  "NETFLIX": "Netflix",
+  NETFLIX: "Netflix",
   "AMAZON PRIME": "Amazon Prime",
   "AMZN PRIME": "Amazon Prime",
-  "SPOTIFY": "Spotify",
-  "SWIGGY": "Swiggy",
-  "ZOMATO": "Zomato",
+  SPOTIFY: "Spotify",
+  SWIGGY: "Swiggy",
+  ZOMATO: "Zomato",
   "GOOGLE YOUTUBE": "YouTube Premium",
-  "YOUTUBE": "YouTube Premium",
+  YOUTUBE: "YouTube Premium",
   "DISNEY+ HOTSTAR": "Disney+ Hotstar",
-  "HOTSTAR": "Disney+ Hotstar",
+  HOTSTAR: "Disney+ Hotstar",
   "MICROSOFT 365": "Microsoft 365",
   "GOOGLE ONE": "Google One",
-  "UBER": "Uber",
-  "OLA": "Ola",
-  "BLINKIT": "Blinkit",
-  "ZEPTO": "Zepto",
-  "CRED": "CRED",
-  "PAYTM": "Paytm",
-  "PHONEPE": "PhonePe",
-  "GPAY": "Google Pay",
-  "AIRTEL": "Airtel",
-  "JIO": "Jio",
+  UBER: "Uber",
+  OLA: "Ola",
+  BLINKIT: "Blinkit",
+  ZEPTO: "Zepto",
+  CRED: "CRED",
+  PAYTM: "Paytm",
+  PHONEPE: "PhonePe",
+  GPAY: "Google Pay",
+  AIRTEL: "Airtel",
+  JIO: "Jio",
 };
 
 /**
@@ -30,7 +30,7 @@ export const KNOWN_MERCHANTS: Record<string, string> = {
 function toTitleCase(str: string): string {
   return str.replace(
     /\w\S*/g,
-    (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()
+    (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase(),
   );
 }
 
@@ -65,16 +65,24 @@ export function normalizeMerchant(rawDescription: string): string {
   }
 
   // IMPS/NEFT extraction
-  const transferMatch = upperDesc.match(/(?:IMPS|NEFT)[\/\-](?:[A-Z0-9]+)[\/\-]([A-Z\s]+)/);
+  const transferMatch = upperDesc.match(
+    /(?:IMPS|NEFT)[\/\-](?:[A-Z0-9]+)[\/\-]([A-Z\s]+)/,
+  );
   if (transferMatch && transferMatch[1]) {
-     return toTitleCase(transferMatch[1].trim());
+    return toTitleCase(transferMatch[1].trim());
   }
 
   // Fallback: take the first significant word/phrase
   const words = rawDescription
     .replace(/[^\w\s]/g, " ")
     .split(/\s+/)
-    .filter((w) => w.length > 2 && !["UPI", "POS", "ECOM", "IMPS", "NEFT", "RTGS", "DR", "CR"].includes(w.toUpperCase()));
+    .filter(
+      (w) =>
+        w.length > 2 &&
+        !["UPI", "POS", "ECOM", "IMPS", "NEFT", "RTGS", "DR", "CR"].includes(
+          w.toUpperCase(),
+        ),
+    );
 
   if (words.length > 0) {
     return toTitleCase(words.slice(0, 3).join(" ")); // up to first 3 words

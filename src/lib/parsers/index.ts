@@ -5,13 +5,21 @@ import { normalizeAmount } from "../normalizers/amount";
 import { normalizeDate } from "../normalizers/date";
 import { normalizeMerchant } from "../normalizers/merchant";
 
-type BankType = 'hdfc' | 'icici' | 'unknown';
+type BankType = "hdfc" | "icici" | "unknown";
 
+/**
+ * Detects the originating bank of a given bank statement text.
+ *
+ * @param text - The raw text extracted from the PDF statement.
+ * @returns The identified BankType or 'unknown' if no match is found.
+ * @example
+ * detectBank("... HDFC BANK LTD ...") // returns 'hdfc'
+ */
 export function detectBank(text: string): BankType {
   const upperText = text.toUpperCase();
-  if (upperText.includes("HDFC BANK")) return 'hdfc';
-  if (upperText.includes("ICICI BANK")) return 'icici';
-  return 'unknown';
+  if (upperText.includes("HDFC BANK")) return "hdfc";
+  if (upperText.includes("ICICI BANK")) return "icici";
+  return "unknown";
 }
 
 function parseSMS(text: string): RawTransaction[] {
@@ -22,7 +30,9 @@ function parseSMS(text: string): RawTransaction[] {
 
   for (const line of lines) {
     const amountMatch = line.match(/(?:Rs\.?|INR)\s*([\d,]+\.?\d*)/i);
-    const dateMatch = line.match(/on\s+(\d{1,2}[-\/][A-Za-z]+[-\/]\d{2,4}|\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4})/i);
+    const dateMatch = line.match(
+      /on\s+(\d{1,2}[-\/][A-Za-z]+[-\/]\d{2,4}|\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4})/i,
+    );
     const isDebit = /(?:debited|spent|paid)/i.test(line);
     const isCredit = /(?:credited|received)/i.test(line);
 
@@ -31,7 +41,7 @@ function parseSMS(text: string): RawTransaction[] {
         date: dateMatch ? dateMatch[1] : new Date().toLocaleDateString(),
         description: line,
         amount: normalizeAmount(amountMatch[1]),
-        type: isCredit ? "credit" : (isDebit ? "debit" : "unknown")
+        type: isCredit ? "credit" : isDebit ? "debit" : "unknown",
       });
     }
   }
@@ -39,21 +49,34 @@ function parseSMS(text: string): RawTransaction[] {
   return transactions;
 }
 
-export function parseTransactions(text: string, source: 'pdf' | 'sms'): NormalizedTransaction[] {
+/**
+ * Parses raw text from a PDF statement or SMS string and normalizes the transactions.
+ *
+ * **Algorithm Decision**: We parse on the client side using Web Workers to ensure PII
+ * (Personal Identifiable Information) like Account Numbers never leave the user's device.
+ *
+ * @param text - The raw text extracted from PDF or SMS.
+ * @param source - The source of the text ('pdf' or 'sms').
+ * @returns Array of NormalizedTransaction objects.
+ */
+export function parseTransactions(
+  text: string,
+  source: "pdf" | "sms",
+): NormalizedTransaction[] {
   let rawTransactions: RawTransaction[] = [];
-  let bank: BankType = 'unknown';
+  let bank: BankType = "unknown";
 
-  if (source === 'pdf') {
+  if (source === "pdf") {
     bank = detectBank(text);
-    if (bank === 'hdfc') {
+    if (bank === "hdfc") {
       rawTransactions = parseHDFC(text);
-    } else if (bank === 'icici') {
+    } else if (bank === "icici") {
       rawTransactions = parseICICI(text);
     } else {
       // Fallback or generic PDF parser could go here
       rawTransactions = parseHDFC(text); // Using HDFC as a naive fallback for now
     }
-  } else if (source === 'sms') {
+  } else if (source === "sms") {
     rawTransactions = parseSMS(text);
   }
 
@@ -66,7 +89,7 @@ export function parseTransactions(text: string, source: 'pdf' | 'sms'): Normaliz
       merchant: normalizeMerchant(raw.description),
       rawDescription: raw.description,
       source,
-      confidence: bank === 'unknown' && source === 'pdf' ? 0.5 : 0.9,
+      confidence: bank === "unknown" && source === "pdf" ? 0.5 : 0.9,
     };
   });
 }
