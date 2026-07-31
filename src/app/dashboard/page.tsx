@@ -22,6 +22,13 @@ import { Badge } from "@/components/ui/badge";
 import { AlertCircle, FileText, MessageSquare, Search, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Crypto & Storage
+import { Vault } from "@/lib/crypto/vault";
+import { saveData, loadData } from "@/lib/storage/indexeddb";
+import { VaultSetup } from "@/components/vault-setup";
+import { VaultLockScreen } from "@/components/vault-lock-screen";
+import { EncryptionIndicator } from "@/components/encryption-indicator";
+
 export default function DashboardPage() {
   const { user } = useAuth();
   const [extractedPdfText, setExtractedPdfText] = useState("");
@@ -38,6 +45,43 @@ export default function DashboardPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showUpload, setShowUpload] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+
+  // Vault State
+  const [vaultSalt, setVaultSalt] = useState<string | null>(null);
+  const [isVaultLocked, setIsVaultLocked] = useState<boolean>(true);
+  const [isVaultChecking, setIsVaultChecking] = useState(true);
+
+  // Initialize Vault State
+  useEffect(() => {
+    const salt = localStorage.getItem("katacut-vault-salt");
+    setVaultSalt(salt);
+
+    const unsubscribe = Vault.subscribe((locked) => {
+      setIsVaultLocked(locked);
+      // Clear in-memory state on lock to ensure zero-knowledge
+      if (locked) {
+        setTransactions([]);
+        setSubscriptions([]);
+        setSubSummary(null);
+      }
+    });
+
+    setIsVaultLocked(Vault.isLocked());
+    setIsVaultChecking(false);
+
+    return unsubscribe;
+  }, []);
+
+  // Load Data on Unlock
+  useEffect(() => {
+    if (!isVaultLocked && !isVaultChecking) {
+      loadData<NormalizedTransaction[]>("transactions", "all").then(data => {
+        if (data) {
+          setTransactions(data);
+        }
+      });
+    }
+  }, [isVaultLocked, isVaultChecking]);
   
   useEffect(() => {
     if (extractedPdfText) {
@@ -48,7 +92,10 @@ export default function DashboardPage() {
       
       setTransactions(prev => {
         const smsTx = prev.filter(t => t.source === "sms");
-        return [...parsed, ...smsTx];
+        const newTxs = [...parsed, ...smsTx];
+        // Encrypt and save to IndexedDB
+        saveData("transactions", "all", newTxs).catch(console.error);
+        return newTxs;
       });
     } else {
        setTransactions(prev => prev.filter(t => t.source === "sms"));
@@ -58,7 +105,12 @@ export default function DashboardPage() {
   const handleSmsParse = (smsText: string) => {
     setIsProcessing(true);
     const parsedSms = parseTransactions(smsText, "sms");
-    setTransactions(prev => [...prev, ...parsedSms]);
+    setTransactions(prev => {
+      const newTxs = [...prev, ...parsedSms];
+      // Encrypt and save to IndexedDB
+      saveData("transactions", "all", newTxs).catch(console.error);
+      return newTxs;
+    });
   };
 
   useEffect(() => {
@@ -135,6 +187,34 @@ export default function DashboardPage() {
   const firstName = user?.email?.split('@')[0] || "User";
   const formattedTime = lastUpdated.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
 
+  // Render Lock/Setup screens if vault is not ready
+  if (isVaultChecking) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-zinc-950">
+        <Loader2 className="w-8 h-8 text-indigo-500 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!vaultSalt) {
+    return <VaultSetup onComplete={() => {
+      setVaultSalt(localStorage.getItem("katacut-vault-salt"));
+      setIsVaultLocked(Vault.isLocked());
+    }} />;
+  }
+
+  if (isVaultLocked) {
+    return <VaultLockScreen 
+      saltBase64={vaultSalt} 
+      onUnlock={() => setIsVaultLocked(false)} 
+      onReset={() => {
+        setVaultSalt(null);
+        setTransactions([]);
+        setSubscriptions([]);
+      }} 
+    />;
+  }
+
   return (
     <AuthGuard>
       <div className="flex min-h-screen flex-col items-center bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 transition-colors duration-300 pb-24 md:pb-8">
@@ -156,6 +236,7 @@ export default function DashboardPage() {
             </div>
             
             <div className="flex items-center gap-3">
+              <EncryptionIndicator />
               <Button variant="outline" size="sm" onClick={() => setShowUpload(!showUpload)} className="hidden sm:flex bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-sm">
                 <FileText className="w-4 h-4 mr-2" />
                 Upload Statement
