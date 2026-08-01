@@ -87,24 +87,22 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${plusJakarta.variable} font-sans h-full antialiased dark`}
+      className={`${plusJakarta.variable} font-sans h-full antialiased`}
     >
       <head>
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
-      <body className="min-h-full flex flex-col bg-slate-900 text-slate-50 selection:bg-emerald-500/30">
+      <body className="min-h-full flex flex-col bg-[#F6F7EB] text-[#393E41]">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
           <ErrorBoundary>
             <InstallPrompt />
             <AuthProvider>
-              <Navbar />
               <main className="flex-1">{children}</main>
-              <BottomNav />
             </AuthProvider>
           </ErrorBoundary>
         </ThemeProvider>
