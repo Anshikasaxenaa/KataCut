@@ -28,7 +28,7 @@ export function TopNavigation() {
         <div className="hidden lg:flex items-center gap-2">
           <Link
             href="#"
-            className="px-6 py-2.5 text-sm font-semibold text-white bg-blue-500 rounded-full shadow-sm"
+            className="px-6 py-2.5 text-sm font-semibold text-white bg-[#0066FF] rounded-full shadow-sm"
           >
             Dashboard
           </Link>

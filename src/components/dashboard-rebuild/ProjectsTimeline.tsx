@@ -20,7 +20,7 @@ export function ProjectsTimeline() {
               </div>
             ))}
           </div>
-          <button className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-colors">
+          <button className="flex items-center gap-2 bg-[#0066FF] hover:bg-[#0052cc] text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-colors">
             <Plus className="w-4 h-4" />
             Add New Task
           </button>
@@ -39,26 +39,26 @@ export function ProjectsTimeline() {
             </div>
           </div>
 
-          <div className="bg-blue-500 rounded-[24px] p-6 text-white shadow-xl relative w-full lg:w-64">
+          <div className="bg-[#0066FF] rounded-[24px] p-6 text-white shadow-xl relative w-full lg:w-64">
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-semibold text-lg">Progress</h3>
-              <div className="w-8 h-8 rounded-full bg-blue-400/30 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
                 <ArrowUpRight className="w-4 h-4" />
               </div>
             </div>
 
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3">
-                <div className="bg-white text-blue-900 px-4 py-1.5 rounded-full text-sm font-medium w-28 text-center">In Test</div>
-                <div className="flex-1 h-8 rounded-full border border-dashed border-blue-300/50"></div>
+                <div className="bg-white text-[#0066FF] px-4 py-1.5 rounded-full text-sm font-medium w-28 text-center">In Test</div>
+                <div className="flex-1 h-8 rounded-full border border-dashed border-white/40"></div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="bg-white text-blue-900 px-4 py-1.5 rounded-full text-sm font-medium w-28 text-center">Reviewed</div>
-                <div className="flex-1 h-8 rounded-full border border-dashed border-blue-300/50"></div>
+                <div className="bg-white text-[#0066FF] px-4 py-1.5 rounded-full text-sm font-medium w-28 text-center">Reviewed</div>
+                <div className="flex-1 h-8 rounded-full border border-dashed border-white/40"></div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="bg-white text-blue-900 px-4 py-1.5 rounded-full text-sm font-medium w-28 text-center">Complete</div>
-                <div className="flex-1 h-8 rounded-full border border-dashed border-blue-300/50"></div>
+                <div className="bg-white text-[#0066FF] px-4 py-1.5 rounded-full text-sm font-medium w-28 text-center">Complete</div>
+                <div className="flex-1 h-8 rounded-full border border-dashed border-white/40"></div>
               </div>
             </div>
 
@@ -80,7 +80,7 @@ export function ProjectsTimeline() {
           {/* Header row */}
           <div className="flex justify-between text-xs font-semibold text-zinc-400 mb-6 pl-[5%]">
             {['2M', '3T', '4W', '5T', '6F', '7S', '8S', '9M', '10T', '11W', '12T', '13F'].map((day, i) => (
-              <div key={day} className={`w-8 h-8 flex items-center justify-center rounded-full ${day === '6F' ? 'bg-blue-500 text-white shadow-md z-10' : ''}`}>
+              <div key={day} className={`w-8 h-8 flex items-center justify-center rounded-full ${day === '6F' ? 'bg-[#0066FF] text-white shadow-md z-10' : ''}`}>
                 {day}
               </div>
             ))}
@@ -90,7 +90,7 @@ export function ProjectsTimeline() {
           <div className="absolute top-[48px] left-0 right-0 bottom-0 z-0" style={{ backgroundImage: 'radial-gradient(circle, #e5e7eb 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
           
           {/* Vertical Line for Current Day */}
-          <div className="absolute top-[40px] bottom-0 left-[41.5%] w-0.5 bg-blue-200 z-0"></div>
+          <div className="absolute top-[40px] bottom-0 left-[41.5%] w-0.5 bg-[#0066FF]/20 z-0"></div>
 
           {/* Timeline Items */}
           <div className="relative z-10 w-full h-full mt-4">
@@ -108,13 +108,13 @@ export function ProjectsTimeline() {
             </div>
 
             {/* Web Design */}
-            <div className="absolute top-[80px] left-[25%] flex items-center bg-blue-500 text-white rounded-full p-1.5 pr-3 shadow-lg">
+            <div className="absolute top-[80px] left-[25%] flex items-center bg-[#0066FF] text-white rounded-full p-1.5 pr-3 shadow-lg">
               <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=B" className="w-7 h-7 rounded-full bg-white p-0.5" />
               <div className="ml-2 mr-8">
                 <div className="text-xs font-bold">Web Design</div>
-                <div className="text-[10px] text-blue-100 font-medium">7 hours</div>
+                <div className="text-[10px] text-white/80 font-medium">7 hours</div>
               </div>
-              <div className="w-6 h-6 rounded-full bg-white text-blue-500 flex items-center justify-center shadow-sm">
+              <div className="w-6 h-6 rounded-full bg-white text-[#0066FF] flex items-center justify-center shadow-sm">
                 <Check className="w-3 h-3 stroke-[3]" />
               </div>
             </div>

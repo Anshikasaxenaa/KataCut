@@ -12,7 +12,7 @@ export function TeamInsights() {
           {[40, 60, 45, 80, 50, 70, 90, 55, 65, 40, 85, 75, 45, 60, 50, 70, 30, 80, 65, 95, 55, 70, 45, 85, 60].map((height, i) => (
             <div 
               key={i} 
-              className={`flex-1 rounded-t-sm ${i === 20 ? 'bg-blue-500' : 'bg-blue-100'}`}
+              className={`flex-1 rounded-t-sm ${i === 20 ? 'bg-[#0066FF]' : 'bg-[#e6f0ff]'}`}
               style={{ height: `${height}%` }}
             ></div>
           ))}
@@ -45,7 +45,7 @@ export function TeamInsights() {
             <div className="text-4xl font-bold text-zinc-900 tracking-tight">08:40:20</div>
             <div className="text-sm text-zinc-500 font-medium mt-2">On Going Start Hi-Fi New Project</div>
           </div>
-          <button className="w-12 h-12 rounded-full bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/30 transition-colors shrink-0">
+          <button className="w-12 h-12 rounded-full bg-[#0066FF] hover:bg-[#0052cc] text-white flex items-center justify-center shadow-lg shadow-[#0066FF]/30 transition-colors shrink-0">
             <Play className="w-5 h-5 ml-1" fill="currentColor" />
           </button>
         </div>

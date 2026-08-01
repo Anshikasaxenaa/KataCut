@@ -22,11 +22,11 @@ export function TaskStatus() {
             <span className="text-sm font-semibold text-zinc-700">High Priority</span>
           </div>
           <div className="relative h-10 w-full bg-transparent flex items-center">
-            <div className="absolute left-0 bg-blue-500 h-10 rounded-l-full rounded-r-[12px] flex items-center shadow-sm z-10" style={{ width: '60%', backgroundImage: 'linear-gradient(to right, #3b82f6 85%, #2563eb 100%)' }}>
+            <div className="absolute left-0 h-10 rounded-l-full rounded-r-[12px] flex items-center shadow-sm z-10" style={{ width: '60%', backgroundImage: 'linear-gradient(to right, #0066FF 85%, #0052cc 100%)' }}>
               <span className="text-white font-bold ml-4 text-sm">60%</span>
             </div>
             {/* 3D End Cap Effect */}
-            <div className="absolute h-10 w-4 bg-blue-600 rounded-full" style={{ left: 'calc(60% - 8px)', zIndex: 5 }}></div>
+            <div className="absolute h-10 w-4 bg-[#0052cc] rounded-full" style={{ left: 'calc(60% - 8px)', zIndex: 5 }}></div>
           </div>
         </div>
 
@@ -36,11 +36,11 @@ export function TaskStatus() {
             <span className="text-sm font-semibold text-zinc-700">Medium Priority</span>
           </div>
           <div className="relative h-10 w-full bg-transparent flex items-center">
-            <div className="absolute left-0 bg-emerald-400 h-10 rounded-l-full rounded-r-[12px] flex items-center shadow-sm z-10" style={{ width: '46%', backgroundImage: 'linear-gradient(to right, #34d399 85%, #10b981 100%)' }}>
+            <div className="absolute left-0 h-10 rounded-l-full rounded-r-[12px] flex items-center shadow-sm z-10" style={{ width: '46%', backgroundImage: 'linear-gradient(to right, #00d284 85%, #00a669 100%)' }}>
               <span className="text-white font-bold ml-4 text-sm">46%</span>
             </div>
             {/* 3D End Cap Effect */}
-            <div className="absolute h-10 w-4 bg-emerald-500 rounded-full" style={{ left: 'calc(46% - 8px)', zIndex: 5 }}></div>
+            <div className="absolute h-10 w-4 bg-[#00a669] rounded-full" style={{ left: 'calc(46% - 8px)', zIndex: 5 }}></div>
           </div>
         </div>
 
@@ -50,11 +50,11 @@ export function TaskStatus() {
             <span className="text-sm font-semibold text-zinc-700">Low Priority</span>
           </div>
           <div className="relative h-10 w-full bg-transparent flex items-center">
-            <div className="absolute left-0 bg-amber-400 h-10 rounded-l-full rounded-r-[12px] flex items-center shadow-sm z-10" style={{ width: '38%', backgroundImage: 'linear-gradient(to right, #fbbf24 85%, #f59e0b 100%)' }}>
+            <div className="absolute left-0 h-10 rounded-l-full rounded-r-[12px] flex items-center shadow-sm z-10" style={{ width: '38%', backgroundImage: 'linear-gradient(to right, #ffc107 85%, #e0a800 100%)' }}>
               <span className="text-white font-bold ml-4 text-sm">38%</span>
             </div>
             {/* 3D End Cap Effect */}
-            <div className="absolute h-10 w-4 bg-amber-500 rounded-full" style={{ left: 'calc(38% - 8px)', zIndex: 5 }}></div>
+            <div className="absolute h-10 w-4 bg-[#e0a800] rounded-full" style={{ left: 'calc(38% - 8px)', zIndex: 5 }}></div>
           </div>
         </div>
 

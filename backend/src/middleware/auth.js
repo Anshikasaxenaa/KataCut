@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateToken = void 0;
-const express_1 = require("express");
 const jwt_1 = require("../utils/jwt");
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers["authorization"];

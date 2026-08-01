@@ -25,7 +25,7 @@ export function ActivityList() {
 
         {/* Item 2 - Active */}
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center shrink-0 mt-1 shadow-md shadow-blue-500/20">
+          <div className="w-10 h-10 rounded-full bg-[#0066FF] flex items-center justify-center shrink-0 mt-1 shadow-md shadow-[#0066FF]/20">
             <FileText className="w-5 h-5 text-white" />
           </div>
           <div className="flex-1">
@@ -33,7 +33,7 @@ export function ActivityList() {
             <p className="text-sm text-zinc-500 mt-1">Align team on priorities and daily goals</p>
           </div>
           <div className="shrink-0 mt-2">
-            <div className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center">
+            <div className="w-6 h-6 rounded-full bg-[#00d284] text-white flex items-center justify-center">
               <CheckCircle2 className="w-4 h-4 border-none" />
             </div>
           </div>

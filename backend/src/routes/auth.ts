@@ -56,6 +56,10 @@ router.post("/register", async (req: Request, res: Response) => {
         passwordHash,
       })
       .returning({ id: users.id, email: users.email });
+    if (!newUser || newUser.length === 0) {
+      res.status(500).json({ error: "Failed to create user." });
+      return;
+    }
 
     const token = generateToken(newUser[0].id);
 
@@ -85,6 +89,11 @@ router.post("/login", loginLimiter, async (req: Request, res: Response) => {
     }
 
     const user = foundUsers[0];
+    if (!user) {
+      res.status(401).json({ error: "Invalid email or password." });
+      return;
+    }
+
     const isMatch = await bcrypt.compare(password, user.passwordHash);
 
     if (!isMatch) {

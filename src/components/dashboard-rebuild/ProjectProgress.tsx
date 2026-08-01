@@ -18,7 +18,7 @@ export function ProjectProgress() {
             <path
               d="M 20 100 A 80 80 0 0 1 180 100"
               fill="none"
-              stroke="#10b981" // Emerald 500
+              stroke="#00d284"
               strokeWidth="24"
               strokeLinecap="round"
             />
@@ -26,7 +26,7 @@ export function ProjectProgress() {
             <path
               d="M 20 100 A 80 80 0 0 1 180 100"
               fill="none"
-              stroke="#2563eb" // Blue 600
+              stroke="#0066FF"
               strokeWidth="24"
               strokeLinecap="round"
               strokeDasharray="251.2"
@@ -52,7 +52,7 @@ export function ProjectProgress() {
           <div className="flex flex-col items-center">
             <span className="text-2xl font-bold text-zinc-900">56</span>
             <div className="flex items-center gap-1.5 mt-1 text-zinc-500">
-              <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+              <div className="w-2 h-2 rounded-full bg-[#00d284]"></div>
               <span className="text-xs font-medium">Our Progress</span>
             </div>
           </div>
