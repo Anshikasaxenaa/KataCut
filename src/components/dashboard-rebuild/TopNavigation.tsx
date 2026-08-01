@@ -3,10 +3,10 @@ import Link from "next/link";
 
 export function TopNavigation() {
   return (
-    <nav className="flex items-center justify-between w-full pb-6 border-b border-zinc-100 bg-transparent pt-6">
+    <nav className="flex items-center justify-between w-full pb-6 border-b border-zinc-200/60 bg-transparent pt-6">
       <div className="flex items-center gap-8">
         {/* Logo */}
-        <div className="flex items-center justify-center w-10 h-10 bg-zinc-900 rounded-full text-white shrink-0">
+        <div className="flex items-center justify-center w-10 h-10 bg-[#393E41] rounded-full text-[#F6F7EB] shrink-0">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -28,37 +28,37 @@ export function TopNavigation() {
         <div className="hidden lg:flex items-center gap-2">
           <Link
             href="#"
-            className="px-6 py-2.5 text-sm font-semibold text-white bg-[#0066FF] rounded-full shadow-sm"
+            className="px-6 py-2.5 text-sm font-semibold text-white bg-[#E94F37] rounded-full shadow-sm"
           >
             Dashboard
           </Link>
           <Link
             href="#"
-            className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
+            className="px-4 py-2 text-sm font-medium text-[#393E41]/70 hover:text-[#393E41] transition-colors"
           >
             Teams
           </Link>
           <Link
             href="#"
-            className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
+            className="px-4 py-2 text-sm font-medium text-[#393E41]/70 hover:text-[#393E41] transition-colors"
           >
             All Projects
           </Link>
           <Link
             href="#"
-            className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
+            className="px-4 py-2 text-sm font-medium text-[#393E41]/70 hover:text-[#393E41] transition-colors"
           >
             Schedule
           </Link>
           <Link
             href="#"
-            className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
+            className="px-4 py-2 text-sm font-medium text-[#393E41]/70 hover:text-[#393E41] transition-colors"
           >
             Chat
           </Link>
           <Link
             href="#"
-            className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
+            className="px-4 py-2 text-sm font-medium text-[#393E41]/70 hover:text-[#393E41] transition-colors"
           >
             Team Project
           </Link>
@@ -66,12 +66,12 @@ export function TopNavigation() {
       </div>
 
       <div className="flex items-center gap-6">
-        <button className="text-zinc-500 hover:text-zinc-800 transition-colors">
+        <button className="text-[#393E41]/60 hover:text-[#393E41] transition-colors">
           <Settings className="w-5 h-5" />
         </button>
-        <button className="relative text-zinc-500 hover:text-zinc-800 transition-colors">
+        <button className="relative text-[#393E41]/60 hover:text-[#393E41] transition-colors">
           <Bell className="w-5 h-5" />
-          <span className="absolute top-0 right-0.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+          <span className="absolute top-0 right-0.5 w-2 h-2 bg-[#E94F37] rounded-full border border-white"></span>
         </button>
         
         <div className="flex items-center gap-3 pl-2">
@@ -83,8 +83,8 @@ export function TopNavigation() {
             />
           </div>
           <div className="hidden sm:block text-sm">
-            <div className="font-bold text-zinc-900">John Smith</div>
-            <div className="text-zinc-500 text-xs font-medium">Admin</div>
+            <div className="font-bold text-[#393E41]">John Smith</div>
+            <div className="text-[#393E41]/60 text-xs font-medium">Admin</div>
           </div>
         </div>
       </div>
