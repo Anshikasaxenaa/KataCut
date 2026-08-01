@@ -55,7 +55,7 @@ const getBrandStyles = (merchantName: string) => {
 
 export function SubscriptionCardSkeleton() {
   return (
-    <Card className="bg-slate-800/60 border-slate-700/50 overflow-hidden backdrop-blur-md">
+    <Card className="bg-white border-[#393E41]/10 overflow-hidden backdrop-blur-md">
       <CardContent className="p-5">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -181,7 +181,7 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
         className="relative z-10 w-full"
       >
         <Card
-          className={`bg-slate-800/80 border-slate-700/50 backdrop-blur-md transition-all duration-300 hover:shadow-xl overflow-hidden ${status === "dormant" ? "border-l-4 border-l-rose-500" : ""}`}
+          className={`bg-white border-[#393E41]/10 backdrop-blur-md transition-all duration-300 hover:shadow-xl overflow-hidden ${status === "dormant" ? "border-l-4 border-l-rose-500" : ""}`}
         >
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -196,14 +196,14 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                     {initial}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-white truncate max-w-[140px] sm:max-w-[180px]">
+                    <h3 className="font-semibold text-[#393E41] truncate max-w-[140px] sm:max-w-[180px]">
                       {merchant}
                     </h3>
-                    <div className="text-sm text-slate-400 flex items-center gap-1">
-                      <span className="font-medium text-slate-300">
+                    <div className="text-sm text-[#393E41]/70 flex items-center gap-1">
+                      <span className="font-medium text-[#393E41]">
                         ₹{amount.toLocaleString("en-IN")}
                       </span>
-                      <span className="text-slate-500">
+                      <span className="text-[#393E41]/60">
                         /
                       </span>
                       <span className="capitalize">
@@ -231,11 +231,11 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
 
               <div className="mt-5 grid grid-cols-2 gap-y-3 gap-x-2 text-sm">
                 <div>
-                  <p className="text-slate-400 text-xs mb-1">
+                  <p className="text-[#393E41]/70 text-xs mb-1">
                     Next Billing
                   </p>
-                  <div className="flex items-center gap-1.5 text-slate-200">
-                    <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                  <div className="flex items-center gap-1.5 text-[#393E41]">
+                    <Calendar className="w-3.5 h-3.5 text-[#393E41]/70" />
                     {nextBilling
                       ? nextBilling.toLocaleDateString("en-IN", {
                           day: "numeric",
@@ -245,18 +245,18 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                   </div>
                 </div>
                 <div>
-                  <p className="text-slate-400 text-xs mb-1">
+                  <p className="text-[#393E41]/70 text-xs mb-1">
                     Confidence
                   </p>
-                  <div className="text-slate-200">
+                  <div className="text-[#393E41]">
                     {confidence}%
                   </div>
                 </div>
                 <div>
-                  <p className="text-slate-400 text-xs mb-1">
+                  <p className="text-[#393E41]/70 text-xs mb-1">
                     Total Spent
                   </p>
-                  <div className="text-slate-200">
+                  <div className="text-[#393E41]">
                     ₹{totalSpent.toLocaleString("en-IN")}
                   </div>
                 </div>
@@ -270,12 +270,12 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                 </div>
               )}
 
-              <div className="mt-4 flex items-center justify-center pt-3 border-t border-slate-700/50">
+              <div className="mt-4 flex items-center justify-center pt-3 border-t border-[#393E41]/10">
                 <motion.div
                   animate={{ rotate: isOpen ? 180 : 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <ChevronDown className="w-5 h-5 text-slate-400" />
+                  <ChevronDown className="w-5 h-5 text-[#393E41]/70" />
                 </motion.div>
               </div>
             </CardContent>
@@ -289,8 +289,8 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               >
-                <div className="px-5 pb-5 pt-4 bg-slate-900/50 border-t border-slate-700/50">
-                  <h4 className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-3">
+                <div className="px-5 pb-5 pt-4 bg-[#F6F7EB] border-t border-[#393E41]/10">
+                  <h4 className="text-[10px] font-semibold text-[#393E41]/60 uppercase tracking-wider mb-3">
                     Recent Transactions
                   </h4>
                   <div className="space-y-3">
@@ -303,7 +303,7 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                           className="flex items-center justify-between text-sm"
                         >
                           <div className="flex flex-col">
-                            <span className="text-slate-300 font-medium">
+                            <span className="text-[#393E41] font-medium">
                               {tx.date.toLocaleDateString("en-IN", {
                                 day: "2-digit",
                                 month: "short",
@@ -311,26 +311,26 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                               })}
                             </span>
                             <span
-                              className="text-slate-500 text-[11px] truncate max-w-[150px]"
+                              className="text-[#393E41]/60 text-[11px] truncate max-w-[150px]"
                               title={tx.rawDescription}
                             >
                               {tx.rawDescription}
                             </span>
                           </div>
-                          <span className="text-slate-200 font-medium">
+                          <span className="text-[#393E41] font-medium">
                             ₹{tx.amount.toLocaleString("en-IN")}
                           </span>
                         </div>
                       ))}
                   </div>
 
-                  <div className="mt-6 pt-4 border-t border-slate-700/50 flex gap-3 items-center">
+                  <div className="mt-6 pt-4 border-t border-[#393E41]/10 flex gap-3 items-center">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         setIsOpen(false);
                       }}
-                      className="flex-1 text-sm font-medium py-2 rounded-md bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
+                      className="flex-1 text-sm font-medium py-2 rounded-md bg-[#393E41]/10 text-[#393E41] hover:bg-[#393E41]/20 transition-colors"
                     >
                       Keep
                     </button>
@@ -346,12 +346,12 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
                   </div>
                   
                   <div className="mt-3 flex justify-between">
-                    <span className="text-xs text-emerald-400 font-medium cursor-pointer hover:underline">
+                    <span className="text-xs text-[#E94F37] font-medium cursor-pointer hover:underline">
                       View all history
                     </span>
                     <button
                       onClick={handleShare}
-                      className="text-xs text-slate-400 hover:text-slate-200 font-medium flex items-center gap-1.5"
+                      className="text-xs text-[#393E41]/70 hover:text-[#393E41] font-medium flex items-center gap-1.5"
                     >
                       <Share2 className="w-3.5 h-3.5" /> Share
                     </button>

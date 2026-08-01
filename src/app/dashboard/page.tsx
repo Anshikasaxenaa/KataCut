@@ -9,7 +9,7 @@ import { TeamInsights } from "@/components/dashboard-rebuild/TeamInsights";
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-[#F6F7EB] text-[#393E41] pb-12 font-sans">
+    <div className="min-h-screen bg-[#f9fafb] text-zinc-900 pb-12 font-sans">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <TopNavigation />
         
