@@ -49,71 +49,82 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --background: #09090B;
+  --foreground: #FAFAFA;
+  --card: #18181B;
+  --card-foreground: #FAFAFA;
+  --popover: #111113;
+  --popover-foreground: #FAFAFA;
+  --primary: #10B981; /* Emerald */
+  --primary-foreground: #09090B;
+  --secondary: #111113; /* Surface */
+  --secondary-foreground: #FAFAFA;
+  --muted: #111113;
+  --muted-foreground: #A1A1AA;
+  --accent: #38BDF8; /* Sky Blue */
+  --accent-foreground: #09090B;
+  --destructive: #F43F5E; /* Rose */
+  --destructive-foreground: #FAFAFA;
+  --warning: #F59E0B; /* Amber */
+  --warning-foreground: #09090B;
+  --border: #27272A;
+  --input: #27272A;
+  --ring: #10B981;
+  
+  --chart-1: #10B981;
+  --chart-2: #38BDF8;
+  --chart-3: #F59E0B;
+  --chart-4: #F43F5E;
+  --chart-5: #8B5CF6;
+
+  --radius: 1.5rem; /* 24px */
+
+  --sidebar: #09090B;
+  --sidebar-foreground: #FAFAFA;
+  --sidebar-primary: #10B981;
+  --sidebar-primary-foreground: #09090B;
+  --sidebar-accent: #111113;
+  --sidebar-accent-foreground: #FAFAFA;
+  --sidebar-border: #27272A;
+  --sidebar-ring: #10B981;
 }
 
 .dark {
-  --background: #0F172A; /* Deep slate/navy */
-  --foreground: #F8FAFC;
-  --card: #1E293B; /* Dark surface cards */
-  --card-foreground: #F8FAFC;
-  --popover: #1E293B;
-  --popover-foreground: #F8FAFC;
-  --primary: #10B981; /* Emerald Green */
-  --primary-foreground: #FFFFFF;
-  --secondary: #334155;
-  --secondary-foreground: #F8FAFC;
-  --muted: #334155;
-  --muted-foreground: #94A3B8;
-  --accent: #334155;
-  --accent-foreground: #F8FAFC;
-  --destructive: #F43F5E; /* Crimson/Rose */
-  --border: #334155;
-  --input: #334155;
+  --background: #09090B;
+  --foreground: #FAFAFA;
+  --card: #18181B;
+  --card-foreground: #FAFAFA;
+  --popover: #111113;
+  --popover-foreground: #FAFAFA;
+  --primary: #10B981;
+  --primary-foreground: #09090B;
+  --secondary: #111113;
+  --secondary-foreground: #FAFAFA;
+  --muted: #111113;
+  --muted-foreground: #A1A1AA;
+  --accent: #38BDF8;
+  --accent-foreground: #09090B;
+  --destructive: #F43F5E;
+  --destructive-foreground: #FAFAFA;
+  --warning: #F59E0B;
+  --warning-foreground: #09090B;
+  --border: #27272A;
+  --input: #27272A;
   --ring: #10B981;
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: #1E293B;
-  --sidebar-foreground: #F8FAFC;
+  
+  --chart-1: #10B981;
+  --chart-2: #38BDF8;
+  --chart-3: #F59E0B;
+  --chart-4: #F43F5E;
+  --chart-5: #8B5CF6;
+
+  --sidebar: #09090B;
+  --sidebar-foreground: #FAFAFA;
   --sidebar-primary: #10B981;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #334155;
-  --sidebar-accent-foreground: #F8FAFC;
-  --sidebar-border: #334155;
+  --sidebar-primary-foreground: #09090B;
+  --sidebar-accent: #111113;
+  --sidebar-accent-foreground: #FAFAFA;
+  --sidebar-border: #27272A;
   --sidebar-ring: #10B981;
 }
 

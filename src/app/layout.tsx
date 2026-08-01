@@ -92,10 +92,11 @@ export default function RootLayout({
       <head>
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
-      <body className="min-h-full flex flex-col bg-[#F6F7EB] text-[#393E41] selection:bg-[#E94F37]/30">
+      <body className="min-h-full flex flex-col bg-background text-foreground antialiased selection:bg-emerald-500/30">
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="dark"
+          forcedTheme="dark"
           enableSystem={false}
           disableTransitionOnChange
         >
