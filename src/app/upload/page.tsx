@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/layout/app-shell";
 import { GlassCard } from "@/components/ui/glass-card";
 import { UploadCloud, Shield, FileText, CheckCircle2 } from "lucide-react";
@@ -12,6 +13,7 @@ export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const router = useRouter();
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -126,8 +128,10 @@ export default function UploadPage() {
                     <FileText className="w-10 h-10 text-emerald-400 animate-pulse" />
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">Analyzing Statement...</h3>
-                <p className="text-zinc-400">Our edge AI is scanning for recurring payments.</p>
+                <h3 className="text-2xl font-bold text-white mb-2">
+                  Extracting page {Math.max(1, Math.min(15, Math.ceil((progress / 100) * 15)))}/15...
+                </h3>
+                <p className="text-zinc-400">Notice: the PDF never left my device. Check Network tab — no upload.</p>
               </motion.div>
             ) : (
               <motion.div
@@ -139,13 +143,16 @@ export default function UploadPage() {
                 <div className="w-24 h-24 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(16,185,129,0.3)]">
                   <CheckCircle2 className="w-12 h-12 text-emerald-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">Analysis Complete!</h3>
-                <p className="text-zinc-400 mb-8">We found 2 new subscriptions in your statement.</p>
+                <h3 className="text-2xl font-bold text-white mb-2">15 pages extracted</h3>
+                <p className="text-zinc-400 mb-8">Notice: the PDF never left my device. Check Network tab — no upload.</p>
                 <div className="flex gap-4">
                   <Button variant="outline" onClick={() => setFile(null)} className="border-white/10 text-white hover:bg-white/5">
                     Upload Another
                   </Button>
-                  <Button className="bg-emerald-500 text-zinc-950 hover:bg-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                  <Button 
+                    className="bg-emerald-500 text-zinc-950 hover:bg-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+                    onClick={() => router.push('/parsing')}
+                  >
                     View Results
                   </Button>
                 </div>

@@ -46,11 +46,11 @@ export default function LandingPage() {
           </div>
           
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-tight">
-            Know where every subscription <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-sky-400">rupee goes.</span>
+            This is <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-sky-400">KataCut.</span>
           </h1>
           
           <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-            Upload your bank statement securely. Discover forgotten subscriptions. Track renewals. Save money. 
+            Privacy-first subscription tracker.
             <br className="hidden md:block" />
             <span className="text-zinc-300 font-medium">Your financial data never leaves your device.</span>
           </p>

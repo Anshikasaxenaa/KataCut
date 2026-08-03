@@ -1,6 +1,10 @@
 "use client";
 
+import { useDashboardContext } from "@/app/dashboard/context";
+
 export function PotentialSavingsCard() {
+  const { potentialSavings } = useDashboardContext();
+
   return (
     <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-[#E2E8F0] h-full flex flex-col items-center text-center">
       <h2 className="text-xl font-bold text-[#0F172A] tracking-tight mb-8 w-full text-left">Total Potential Savings</h2>
@@ -20,7 +24,7 @@ export function PotentialSavingsCard() {
       
       <div className="bg-[#10B981]/10 px-6 py-4 rounded-xl border border-[#10B981]/20 mt-2">
         <div className="text-sm font-medium text-[#10B981] mb-1">Dormant Subs Identified</div>
-        <div className="text-2xl font-bold text-[#10B981]">₹819 /mo</div>
+        <div className="text-2xl font-bold text-[#10B981]">₹{potentialSavings} /mo</div>
       </div>
     </div>
   );
