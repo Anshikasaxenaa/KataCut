@@ -92,20 +92,18 @@ export default function RootLayout({
       <head>
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
-      <body className="min-h-full flex flex-col bg-background text-foreground antialiased selection:bg-emerald-500/30">
+      <body className="min-h-full flex flex-col bg-[#F8FAFC] text-[#0F172A] antialiased selection:bg-[#0066FF]/30">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          forcedTheme="dark"
+          defaultTheme="light"
+          forcedTheme="light"
           enableSystem={false}
           disableTransitionOnChange
         >
           <ErrorBoundary>
             <InstallPrompt />
             <AuthProvider>
-              <Navbar />
               <main className="flex-1">{children}</main>
-              <BottomNav />
             </AuthProvider>
           </ErrorBoundary>
         </ThemeProvider>

@@ -20,8 +20,8 @@ export function useAuth() {
     user: session?.user || null,
     isAuthenticated: status === "authenticated",
     isLoading: status === "loading",
-    login: async (provider = "google") => {
-      await signIn(provider, { callbackUrl: "/dashboard" });
+    login: async (provider = "google", options?: any) => {
+      return await signIn(provider, { callbackUrl: "/dashboard", ...options });
     },
     logout: async () => {
       await signOut({ callbackUrl: "/login" });
