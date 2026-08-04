@@ -37,6 +37,12 @@ function LoginForm() {
     setIsLoading(true);
     setError("");
 
+    if (!formData.email || !formData.password) {
+      setError("Please fill in all fields.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const res = await login("credentials", {
         email: formData.email,

@@ -1,43 +1,28 @@
 "use client";
 
-import { CheckCircle2, AlertTriangle, MoreVertical, Filter, Send } from "lucide-react";
+import { CheckCircle2, AlertTriangle, MoreVertical, Filter, Send, Inbox } from "lucide-react";
 import { useState } from "react";
-import { useDashboardContext } from "@/app/dashboard/context";
+import { useGlobalContext } from "@/app/global-context";
 
 export function SubscriptionList() {
   const [filterDormant, setFilterDormant] = useState(false);
-  const { setPotentialSavings, setDormantCount, setActiveCount } = useDashboardContext();
-  const [cultFitCanceled, setCultFitCanceled] = useState(false);
+  const { subscriptions, setSubscriptions, updateCounts } = useGlobalContext();
 
-  let subscriptions = [
-    { name: "Netflix", cost: "₹649", category: "Entertainment", status: "keep", logo: "N", color: "bg-[#E50914]", desc: "" },
-    { name: "Spotify", cost: "₹119", category: "Entertainment", status: "keep", logo: "S", color: "bg-[#1DB954]", desc: "" },
-    { name: "Adobe CC", cost: "₹2,389", category: "Productivity", status: "keep", logo: "A", color: "bg-[#FF0000]", desc: "" },
-    { 
-      name: "Cult.fit", 
-      cost: "₹1,499", 
-      category: "Health", 
-      status: cultFitCanceled ? "canceled" : "cancel", 
-      logo: "C", 
-      color: "bg-[#FF3366]",
-      desc: "Cult.fit. Last used 90 days ago. Still paying ₹1,499/month."
-    },
-    { name: "Prime Video", cost: "₹299", category: "Entertainment", status: "keep", logo: "P", color: "bg-[#00A8E1]", desc: "" },
-  ];
-
+  let displayedSubscriptions = subscriptions;
   if (filterDormant) {
-    subscriptions = subscriptions.filter(s => s.status === "cancel" || s.status === "canceled");
+    displayedSubscriptions = displayedSubscriptions.filter(s => s.status === "cancel" || s.status === "canceled");
   }
 
-  const handleCancelCultFit = () => {
+  const handleCancel = (subName: string) => {
     // Open Gmail draft
-    window.open("mailto:hello@cult.fit?subject=Cancel%20My%20Subscription&body=Hi%20team,%0A%0APlease%20cancel%20my%20Cult.fit%20subscription%20effective%20immediately.%0A%0AThank%20you.");
+    window.open(`mailto:hello@${subName.toLowerCase().replace(' ', '')}.com?subject=Cancel%20My%20Subscription&body=Hi%20team,%0A%0APlease%20cancel%20my%20${subName}%20subscription%20effective%20immediately.%0A%0AThank%20you.`);
     
-    // Update dashboard state
-    setCultFitCanceled(true);
-    setPotentialSavings(948);
-    setDormantCount(1);
-    setActiveCount(8);
+    // Update global state
+    const updatedSubs = subscriptions.map(sub => 
+      sub.name === subName ? { ...sub, status: "canceled" as const } : sub
+    );
+    setSubscriptions(updatedSubs);
+    updateCounts(updatedSubs);
   };
 
   return (
@@ -56,8 +41,17 @@ export function SubscriptionList() {
       </div>
       
       <div className="divide-y divide-[#E2E8F0]">
-        {subscriptions.map((sub, i) => (
-          <div key={i} className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-[#F8FAFC] transition-colors group gap-4">
+        {displayedSubscriptions.length === 0 ? (
+          <div className="p-12 flex flex-col items-center justify-center text-center">
+            <div className="w-16 h-16 bg-zinc-100 rounded-full flex items-center justify-center mb-4">
+              <Inbox className="w-8 h-8 text-zinc-400" />
+            </div>
+            <h3 className="text-lg font-bold text-[#0F172A] mb-1">No subscriptions found</h3>
+            <p className="text-zinc-500 text-sm">Upload a bank statement to detect subscriptions.</p>
+          </div>
+        ) : (
+          displayedSubscriptions.map((sub, i) => (
+            <div key={i} className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-[#F8FAFC] transition-colors group gap-4">
             <div className="flex items-center gap-4">
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-sm shrink-0 ${sub.color}`}>
                 {sub.logo}
@@ -94,7 +88,7 @@ export function SubscriptionList() {
                 ) : (
                   <div className="flex items-center gap-2">
                     <button 
-                      onClick={sub.name === "Cult.fit" ? handleCancelCultFit : undefined}
+                      onClick={() => handleCancel(sub.name)}
                       className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#F43F5E] text-white hover:bg-[#E11D48] transition-colors shadow-sm shadow-[#F43F5E]/20 font-bold text-xs uppercase tracking-wider hover:scale-105 active:scale-95"
                     >
                       <Send className="w-3.5 h-3.5" />
@@ -105,7 +99,8 @@ export function SubscriptionList() {
               </div>
             </div>
           </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

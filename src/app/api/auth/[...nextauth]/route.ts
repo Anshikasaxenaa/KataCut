@@ -38,13 +38,13 @@ export const authOptions: NextAuthOptions = {
         const user = userRecord[0];
 
         if (!user || !user.password) {
-          throw new Error("Invalid email or password");
+          throw new Error("Invalid credentials");
         }
 
         const isValid = await bcrypt.compare(credentials.password, user.password);
 
         if (!isValid) {
-          throw new Error("Invalid email or password");
+          throw new Error("Invalid credentials");
         }
 
         return {

@@ -5,11 +5,11 @@ import { DataSecurityCard } from "@/components/dashboard/DataSecurityCard";
 import { BurnBreakdownCard } from "@/components/dashboard/BurnBreakdownCard";
 import { PotentialSavingsCard } from "@/components/dashboard/PotentialSavingsCard";
 import { SubscriptionList } from "@/components/dashboard/SubscriptionList";
-import { DashboardProvider, useDashboardContext } from "./context";
+import { useGlobalContext } from "../global-context";
 import { Activity, Moon } from "lucide-react";
 
-function DashboardContent() {
-  const { activeCount, dormantCount } = useDashboardContext();
+export default function DashboardPage() {
+  const { activeCount, dormantCount } = useGlobalContext();
   
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
@@ -55,13 +55,5 @@ function DashboardContent() {
         </div>
       </main>
     </div>
-  );
-}
-
-export default function DashboardPage() {
-  return (
-    <DashboardProvider>
-      <DashboardContent />
-    </DashboardProvider>
   );
 }

@@ -6,8 +6,11 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { Shield, Building, ArrowRight, Database } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+import { useGlobalContext } from "../global-context";
+
 export default function ParsingPage() {
   const router = useRouter();
+  const { setSubscriptions, updateCounts } = useGlobalContext();
   
   // Mock 5 rows for visual representation
   const transactions = [
@@ -17,6 +20,19 @@ export default function ParsingPage() {
     { date: "02 Aug 2026", desc: "ADOBE CREATIVE CLOUD", amount: "-₹2,389.00", category: "Productivity" },
     { date: "01 Aug 2026", desc: "SPOTIFY PREMIUM", amount: "-₹119.00", category: "Entertainment" },
   ];
+
+  const handleAnalyze = () => {
+    const defaultSubs = [
+      { name: "Netflix", cost: "₹649", category: "Entertainment", status: "keep" as const, logo: "N", color: "bg-[#E50914]", desc: "" },
+      { name: "Spotify", cost: "₹119", category: "Entertainment", status: "keep" as const, logo: "S", color: "bg-[#1DB954]", desc: "" },
+      { name: "Adobe CC", cost: "₹2,389", category: "Productivity", status: "keep" as const, logo: "A", color: "bg-[#FF0000]", desc: "" },
+      { name: "Cult.fit", cost: "₹1,499", category: "Health", status: "cancel" as const, logo: "C", color: "bg-[#FF3366]", desc: "Cult.fit. Last used 90 days ago. Still paying ₹1,499/month." },
+      { name: "Prime Video", cost: "₹299", category: "Entertainment", status: "keep" as const, logo: "P", color: "bg-[#00A8E1]", desc: "" },
+    ];
+    setSubscriptions(defaultSubs);
+    updateCounts(defaultSubs);
+    router.push('/dashboard');
+  };
 
   return (
     <AppShell>
@@ -90,7 +106,7 @@ export default function ParsingPage() {
         <div className="flex justify-end pt-4">
           <Button 
             className="bg-emerald-500 text-zinc-950 hover:bg-emerald-400 px-8 py-6 rounded-xl text-lg font-bold shadow-[0_0_30px_rgba(16,185,129,0.3)] flex items-center gap-2 transition-transform hover:scale-105"
-            onClick={() => router.push('/dashboard')}
+            onClick={handleAnalyze}
           >
             Analyze Subscriptions <ArrowRight className="w-5 h-5" />
           </Button>

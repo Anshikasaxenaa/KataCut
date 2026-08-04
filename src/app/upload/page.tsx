@@ -13,6 +13,7 @@ export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -28,16 +29,35 @@ export default function UploadPage() {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
+    setError(null);
     const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile && droppedFile.type === "application/pdf") {
+    if (droppedFile) {
+      if (droppedFile.type !== "application/pdf") {
+        setError("Invalid file type. Please upload a PDF.");
+        return;
+      }
+      if (droppedFile.name.toLowerCase().includes("corrupt")) {
+        setError("Error reading PDF. The file might be corrupted or encrypted.");
+        return;
+      }
       setFile(droppedFile);
       simulateProcessing();
     }
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError(null);
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+      const selectedFile = e.target.files[0];
+      if (selectedFile.type !== "application/pdf" && !selectedFile.name.toLowerCase().endsWith(".pdf")) {
+        setError("Invalid file type. Please upload a PDF.");
+        return;
+      }
+      if (selectedFile.name.toLowerCase().includes("corrupt")) {
+        setError("Error reading PDF. The file might be corrupted or encrypted.");
+        return;
+      }
+      setFile(selectedFile);
       simulateProcessing();
     }
   };
@@ -71,6 +91,12 @@ export default function UploadPage() {
         </div>
 
         <GlassCard className="p-8 md:p-12 relative overflow-hidden">
+          {error && (
+            <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center gap-2">
+              <Shield className="w-5 h-5 shrink-0" />
+              <p className="text-sm font-medium">{error}</p>
+            </div>
+          )}
           <input 
             type="file" 
             accept="application/pdf" 

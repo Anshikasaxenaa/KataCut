@@ -38,6 +38,12 @@ function RegisterForm() {
     setIsLoading(true);
     setError("");
 
+    if (!formData.name || !formData.email || !formData.password) {
+      setError("Please fill in all fields.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/auth/register", {
         method: "POST",

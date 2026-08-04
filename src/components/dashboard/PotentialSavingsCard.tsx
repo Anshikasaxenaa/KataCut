@@ -1,9 +1,10 @@
 "use client";
 
-import { useDashboardContext } from "@/app/dashboard/context";
+import { Coins, ArrowUpRight } from "lucide-react";
+import { useGlobalContext } from "@/app/global-context";
 
 export function PotentialSavingsCard() {
-  const { potentialSavings } = useDashboardContext();
+  const { potentialSavings } = useGlobalContext();
 
   return (
     <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-[#E2E8F0] h-full flex flex-col items-center text-center">

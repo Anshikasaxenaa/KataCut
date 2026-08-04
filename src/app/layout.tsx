@@ -78,6 +78,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { InstallPrompt } from "@/components/install-prompt";
 import { ErrorBoundary } from "@/components/error-boundary";
 
+import { GlobalProvider } from "./global-context";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -103,7 +105,9 @@ export default function RootLayout({
           <ErrorBoundary>
             <InstallPrompt />
             <AuthProvider>
-              <main className="flex-1">{children}</main>
+              <GlobalProvider>
+                <main className="flex-1">{children}</main>
+              </GlobalProvider>
             </AuthProvider>
           </ErrorBoundary>
         </ThemeProvider>
