@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Settings, Bell, UserCircle, FileText, PieChart, Shield } from "lucide-react";
+import { Settings, Bell, UserCircle, Receipt, BarChart3, Lock, SlidersHorizontal } from "lucide-react";
 
 export function TopHeader() {
   return (
@@ -17,19 +17,19 @@ export function TopHeader() {
               Vault
             </button>
             <Link href="/statements" className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-[#0F172A]/70 hover:text-[#0F172A] transition-colors rounded-full hover:bg-black/5">
-              <FileText className="w-4 h-4" />
+              <Receipt className="w-4 h-4" />
               Statements
             </Link>
             <Link href="/analysis" className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-[#0F172A]/70 hover:text-[#0F172A] transition-colors rounded-full hover:bg-black/5">
-              <PieChart className="w-4 h-4" />
+              <BarChart3 className="w-4 h-4" />
               Analysis
             </Link>
             <Link href="/security" className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-[#0F172A]/70 hover:text-[#0F172A] transition-colors rounded-full hover:bg-black/5">
-              <Shield className="w-4 h-4" />
+              <Lock className="w-4 h-4" />
               Security
             </Link>
             <Link href="/settings" className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-[#0F172A]/70 hover:text-[#0F172A] transition-colors rounded-full hover:bg-black/5">
-              <Settings className="w-4 h-4" />
+              <SlidersHorizontal className="w-4 h-4" />
               Settings
             </Link>
           </div>
