@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Lock, FileText, UploadCloud, ArrowRight } from "lucide-react";
 
 export function DataSecurityCard() {
@@ -48,10 +49,12 @@ export function DataSecurityCard() {
         </div>
       </div>
 
-      <button className="w-full py-3.5 rounded-xl bg-[#0066FF] hover:bg-[#0052CC] text-white font-semibold transition-all shadow-[0_4px_14px_0_rgba(0,102,255,0.39)] hover:shadow-[0_6px_20px_rgba(0,102,255,0.23)] hover:-translate-y-0.5 flex items-center justify-center gap-2">
-        <UploadCloud className="w-5 h-5" />
-        Scan New Statement PDF
-      </button>
+      <Link href="/upload" className="w-full">
+        <button className="w-full py-3.5 rounded-xl bg-[#0066FF] hover:bg-[#0052CC] text-white font-semibold transition-all shadow-[0_4px_14px_0_rgba(0,102,255,0.39)] hover:shadow-[0_6px_20px_rgba(0,102,255,0.23)] hover:-translate-y-0.5 flex items-center justify-center gap-2">
+          <UploadCloud className="w-5 h-5" />
+          Scan New Statement PDF
+        </button>
+      </Link>
     </div>
   );
 }

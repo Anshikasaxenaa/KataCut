@@ -36,16 +36,20 @@ export function TopHeader() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="p-2 text-[#0F172A]/70 hover:text-[#0F172A] hover:bg-black/5 rounded-full transition-colors">
-            <Settings className="w-5 h-5" />
-          </button>
-          <button className="p-2 text-[#0F172A]/70 hover:text-[#0F172A] hover:bg-black/5 rounded-full transition-colors relative">
+          <Link href="/settings">
+            <button className="p-2 text-[#0F172A]/70 hover:text-[#0F172A] hover:bg-black/5 rounded-full transition-colors">
+              <Settings className="w-5 h-5" />
+            </button>
+          </Link>
+          <button onClick={() => alert("Notifications coming soon!")} className="p-2 text-[#0F172A]/70 hover:text-[#0F172A] hover:bg-black/5 rounded-full transition-colors relative">
             <Bell className="w-5 h-5" />
             <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#F43F5E]"></span>
           </button>
-          <button className="ml-2 w-8 h-8 rounded-full bg-[#E2E8F0] flex items-center justify-center text-[#0F172A]/70 hover:bg-[#0F172A]/10 transition-colors">
-            <UserCircle className="w-6 h-6" />
-          </button>
+          <Link href="/settings">
+            <button className="ml-2 w-8 h-8 rounded-full bg-[#E2E8F0] flex items-center justify-center text-[#0F172A]/70 hover:bg-[#0F172A]/10 transition-colors">
+              <UserCircle className="w-6 h-6" />
+            </button>
+          </Link>
         </div>
       </div>
     </header>
