@@ -17,7 +17,7 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
       allowDangerousEmailAccountLinking: true,
-      checks: ['pkce', 'state'],
+      checks: ['pkce'],
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -62,7 +62,6 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: '/login',
-    newUser: '/register',
   },
   callbacks: {
     async jwt({ token, user }) {
