@@ -63,7 +63,7 @@ export default function LandingPage() {
               Start Free <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
-              href="#demo"
+              href="/upload"
               className="flex items-center gap-2 text-base font-semibold bg-zinc-900 text-white px-8 py-4 rounded-full border border-zinc-800 hover:bg-zinc-800 transition-all"
             >
               See Demo
