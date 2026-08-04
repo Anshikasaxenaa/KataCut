@@ -1,7 +1,9 @@
 "use client";
 
 import { TrendingUp, MoreHorizontal } from "lucide-react";
+import { useGlobalContext } from "@/app/global-context";
 
+export function BurnBreakdownCard() {
   const { subscriptions } = useGlobalContext();
 
   // Calculate dynamic breakdown
