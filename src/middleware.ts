@@ -1,47 +1,49 @@
+import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { getToken } from "next-auth/jwt";
 
-export async function middleware(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  const isAuth = !!token;
-  
-  const isAuthPage =
-    req.nextUrl.pathname === "/login" ||
-    req.nextUrl.pathname === "/register" ||
-    req.nextUrl.pathname === "/forgot-password" ||
-    req.nextUrl.pathname === "/reset-password" ||
-    req.nextUrl.pathname === "/"; // Assuming the landing page is also an auth/public page and logged in users go to dashboard
+export default withAuth(
+  function middleware(req) {
+    const isAuth = !!req.nextauth.token;
+    const isAuthPage =
+      req.nextUrl.pathname === "/login" ||
+      req.nextUrl.pathname === "/register" ||
+      req.nextUrl.pathname === "/forgot-password" ||
+      req.nextUrl.pathname === "/reset-password" ||
+      req.nextUrl.pathname === "/"; // Assuming landing page is public but logged in users go to dashboard
 
-  // If the user is on an auth/public page but is already authenticated, redirect to dashboard
-  if (isAuthPage && isAuth) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
-  }
-
-  // Define protected routes
-  const isProtectedRoute = 
-    req.nextUrl.pathname.startsWith("/dashboard") ||
-    req.nextUrl.pathname.startsWith("/upload") ||
-    req.nextUrl.pathname.startsWith("/parsing") ||
-    req.nextUrl.pathname.startsWith("/statements") ||
-    req.nextUrl.pathname.startsWith("/analysis") ||
-    req.nextUrl.pathname.startsWith("/security") ||
-    req.nextUrl.pathname.startsWith("/settings") ||
-    req.nextUrl.pathname.startsWith("/insights");
-
-  // If the user is NOT authenticated and tries to access a protected route, redirect to login
-  if (!isAuth && isProtectedRoute) {
-    let from = req.nextUrl.pathname;
-    if (req.nextUrl.search) {
-      from += req.nextUrl.search;
+    // If the user is on an auth/public page but is already authenticated, redirect to dashboard
+    if (isAuthPage && isAuth) {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
     }
-    return NextResponse.redirect(
-      new URL(`/login?callbackUrl=${encodeURIComponent(from)}`, req.url)
-    );
-  }
+    
+    return NextResponse.next();
+  },
+  {
+    callbacks: {
+      authorized: ({ req, token }) => {
+        // Define protected routes
+        const isProtectedRoute = 
+          req.nextUrl.pathname.startsWith("/dashboard") ||
+          req.nextUrl.pathname.startsWith("/upload") ||
+          req.nextUrl.pathname.startsWith("/parsing") ||
+          req.nextUrl.pathname.startsWith("/statements") ||
+          req.nextUrl.pathname.startsWith("/analysis") ||
+          req.nextUrl.pathname.startsWith("/security") ||
+          req.nextUrl.pathname.startsWith("/settings") ||
+          req.nextUrl.pathname.startsWith("/insights");
 
-  return NextResponse.next();
-}
+        if (isProtectedRoute) {
+          return !!token;
+        }
+        // For all other routes, allow the request to proceed to the middleware function
+        return true;
+      },
+    },
+    pages: {
+      signIn: "/login",
+    }
+  }
+);
 
 export const config = {
   matcher: [

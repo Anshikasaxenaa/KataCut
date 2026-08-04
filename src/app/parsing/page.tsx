@@ -86,10 +86,10 @@ export default function ParsingPage() {
                 142 transactions found in {filename}
               </h2>
               <div className="flex gap-2">
-                <Button variant="outline" className="border-[#E2E8F0] text-[#0F172A] hover:bg-[#F8FAFC] cursor-not-allowed">
+                <Button onClick={() => alert("Search functionality coming soon!")} variant="outline" className="border-[#E2E8F0] text-[#0F172A] hover:bg-[#F8FAFC]">
                   Search
                 </Button>
-                <Button variant="outline" className="border-[#E2E8F0] text-[#0F172A] hover:bg-[#F8FAFC] cursor-not-allowed">
+                <Button onClick={() => alert("Sorting functionality coming soon!")} variant="outline" className="border-[#E2E8F0] text-[#0F172A] hover:bg-[#F8FAFC]">
                   Sort
                 </Button>
               </div>

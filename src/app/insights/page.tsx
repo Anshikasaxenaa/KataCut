@@ -6,6 +6,7 @@ import { Sparkles, TrendingDown, AlertTriangle, Zap, CheckCircle2 } from "lucide
 import { Button } from "@/components/ui/button";
 import { useGlobalContext } from "../global-context";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function InsightsPage() {
   const { subscriptions } = useGlobalContext();
@@ -77,9 +78,11 @@ export default function InsightsPage() {
             </div>
             <h3 className="text-xl font-bold text-[#0F172A] mb-2">You're all caught up!</h3>
             <p className="text-[#0F172A]/60 max-w-sm">Upload a more recent bank statement to generate fresh insights and savings opportunities.</p>
-            <Button variant="outline" className="mt-6 border-[#E2E8F0] text-[#0F172A] hover:bg-[#F8FAFC]">
-              Upload New Statement
-            </Button>
+            <Link href="/upload">
+              <Button variant="outline" className="mt-6 border-[#E2E8F0] text-[#0F172A] hover:bg-[#F8FAFC]">
+                Upload New Statement
+              </Button>
+            </Link>
           </div>
         </div>
       </main>

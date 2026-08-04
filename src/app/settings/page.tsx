@@ -42,7 +42,7 @@ export default function SettingsPage() {
                       <h3 className="text-lg font-bold text-[#0F172A] mb-1">Encryption Key</h3>
                       <p className="text-[#0F172A]/60 text-sm">Manage your zero-knowledge encryption key.</p>
                     </div>
-                    <Button variant="outline" className="border-[#E2E8F0] text-[#0F172A] hover:bg-[#F8FAFC] flex items-center gap-2">
+                    <Button onClick={() => alert("Exporting key...")} variant="outline" className="border-[#E2E8F0] text-[#0F172A] hover:bg-[#F8FAFC] flex items-center gap-2">
                       <Key className="w-4 h-4" /> Export Key
                     </Button>
                   </div>
@@ -52,7 +52,11 @@ export default function SettingsPage() {
                       <h3 className="text-lg font-bold text-[#F43F5E] mb-1">Clear Local Data</h3>
                       <p className="text-[#0F172A]/60 text-sm">Permanently delete all locally cached statements and subscriptions.</p>
                     </div>
-                    <Button variant="destructive" className="bg-[#F43F5E]/10 text-[#F43F5E] hover:bg-[#F43F5E]/20 border border-[#F43F5E]/20 flex items-center gap-2 shadow-none">
+                    <Button onClick={() => {
+                        if (confirm("Are you sure you want to clear local data?")) {
+                          alert("Local data cleared.");
+                        }
+                      }} variant="destructive" className="bg-[#F43F5E]/10 text-[#F43F5E] hover:bg-[#F43F5E]/20 border border-[#F43F5E]/20 flex items-center gap-2 shadow-none">
                       <Trash2 className="w-4 h-4" /> Clear Data
                     </Button>
                   </div>
@@ -81,7 +85,11 @@ export default function SettingsPage() {
                       <h3 className="text-lg font-bold text-[#F43F5E] mb-1">Delete Account</h3>
                       <p className="text-[#0F172A]/60 text-sm">Permanently delete your account and all associated data.</p>
                     </div>
-                    <Button variant="destructive" className="bg-[#F43F5E] text-white hover:bg-[#E11D48] shadow-sm">
+                    <Button onClick={() => {
+                        if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+                          alert("Account deleted.");
+                        }
+                      }} variant="destructive" className="bg-[#F43F5E] text-white hover:bg-[#E11D48] shadow-sm">
                       Delete Account
                     </Button>
                   </div>

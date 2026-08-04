@@ -27,7 +27,7 @@ export function BurnBreakdownCard() {
     <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-[#E2E8F0] h-full flex flex-col justify-between">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold text-[#0F172A] tracking-tight">Monthly Burn Breakdown</h2>
-        <button className="text-[#0F172A]/40 hover:text-[#0F172A]/70 transition-colors">
+        <button onClick={() => alert("More options coming soon!")} className="text-[#0F172A]/40 hover:text-[#0F172A]/70 transition-colors">
           <MoreHorizontal className="w-5 h-5" />
         </button>
       </div>

@@ -13,9 +13,11 @@ export function TopHeader() {
           </Link>
           
           <div className="hidden md:flex items-center gap-1">
-            <button className="px-4 py-1.5 rounded-full bg-[#0066FF] text-white text-sm font-semibold shadow-[0_4px_14px_0_rgba(0,102,255,0.39)] transition-transform hover:scale-105 active:scale-95">
-              Vault
-            </button>
+            <Link href="/dashboard">
+              <button className="px-4 py-1.5 rounded-full bg-[#0066FF] text-white text-sm font-semibold shadow-[0_4px_14px_0_rgba(0,102,255,0.39)] transition-transform hover:scale-105 active:scale-95">
+                Vault
+              </button>
+            </Link>
             <Link href="/statements" className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-[#0F172A]/70 hover:text-[#0F172A] transition-colors rounded-full hover:bg-black/5">
               <Receipt className="w-4 h-4" />
               Statements
