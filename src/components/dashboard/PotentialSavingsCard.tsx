@@ -13,13 +13,24 @@ export function PotentialSavingsCard() {
       {/* Semi-circular gauge (CSS implementation) */}
       <div className="relative w-48 h-24 overflow-hidden mb-6">
         <div className="absolute top-0 left-0 w-48 h-48 rounded-full border-[16px] border-[#E2E8F0]"></div>
-        <div 
-          className="absolute top-0 left-0 w-48 h-48 rounded-full border-[16px] border-transparent border-t-[#10B981] border-l-[#10B981] border-b-[#0066FF] border-r-transparent rotate-45"
-          style={{ clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' }}
-        ></div>
+        {potentialSavings > 0 ? (
+          <div 
+            className="absolute top-0 left-0 w-48 h-48 rounded-full border-[16px] border-transparent border-t-[#10B981] border-l-[#10B981] border-b-[#0066FF] border-r-transparent rotate-45"
+            style={{ clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' }}
+          ></div>
+        ) : null}
         <div className="absolute bottom-0 left-0 w-full flex flex-col items-center justify-end pb-2">
-          <span className="text-sm font-bold text-[#10B981]">Good</span>
-          <span className="text-3xl font-extrabold text-[#0F172A] tracking-tighter">35%</span>
+          {potentialSavings > 0 ? (
+            <>
+              <span className="text-sm font-bold text-[#10B981]">Good</span>
+              <span className="text-3xl font-extrabold text-[#0F172A] tracking-tighter">35%</span>
+            </>
+          ) : (
+             <>
+              <span className="text-sm font-bold text-zinc-400">Idle</span>
+              <span className="text-3xl font-extrabold text-[#0F172A] tracking-tighter">0%</span>
+            </>
+          )}
         </div>
       </div>
       
