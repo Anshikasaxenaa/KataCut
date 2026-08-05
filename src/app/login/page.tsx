@@ -8,11 +8,12 @@ import { Suspense } from "react";
 import { Logo } from "@/components/ui/logo";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
+import { useGoogleLogin } from "@react-oauth/google";
 
 function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -21,16 +22,26 @@ function LoginForm() {
   });
   const [error, setError] = useState("");
 
-  const handleGoogleSignIn = async () => {
-    try {
-      setIsGoogleLoading(true);
-      alert("Google Sign In requires additional OAuth setup without NextAuth.");
-      setIsGoogleLoading(false);
-    } catch (err) {
-      console.error(err);
+  const handleGoogleSignIn = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        setIsGoogleLoading(true);
+        const res = await loginWithGoogle(tokenResponse.access_token);
+        if (res?.error) {
+          throw new Error(res.error);
+        }
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || "Failed to login with Google");
+        setIsGoogleLoading(false);
+      }
+    },
+    onError: () => {
+      console.error("Google Login Failed");
+      setError("Google Login Failed");
       setIsGoogleLoading(false);
     }
-  };
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -135,7 +146,8 @@ function LoginForm() {
         </div>
 
         <Button
-          onClick={handleGoogleSignIn}
+          onClick={() => handleGoogleSignIn()}
+          type="button"
           variant="outline"
           className="w-full bg-white text-[#0F172A] border-[#E2E8F0] hover:bg-[#F8FAFC] font-medium py-6 shadow-sm"
           disabled={isLoading || isGoogleLoading}

@@ -79,6 +79,7 @@ import { InstallPrompt } from "@/components/install-prompt";
 import { ErrorBoundary } from "@/components/error-boundary";
 
 import { GlobalProvider } from "./global-context";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function RootLayout({
   children,
@@ -104,11 +105,13 @@ export default function RootLayout({
         >
           <ErrorBoundary>
             <InstallPrompt />
-            <AuthProvider>
-              <GlobalProvider>
-                <main className="flex-1">{children}</main>
-              </GlobalProvider>
-            </AuthProvider>
+            <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+              <AuthProvider>
+                <GlobalProvider>
+                  <main className="flex-1">{children}</main>
+                </GlobalProvider>
+              </AuthProvider>
+            </GoogleOAuthProvider>
           </ErrorBoundary>
         </ThemeProvider>
       </body>

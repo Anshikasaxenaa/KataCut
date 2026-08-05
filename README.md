@@ -15,9 +15,8 @@
     <img src="https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white" alt="shadcn/ui" />
     <img src="https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white" alt="PWA" />
     <img src="https://img.shields.io/badge/Web_Crypto_API-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Web Crypto API" />
-    <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express" />
-    <img src="https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
-    <img src="https://img.shields.io/badge/Drizzle-C5F74F?style=for-the-badge&logo=drizzle&logoColor=black" alt="Drizzle" />
+    <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
+    <img src="https://img.shields.io/badge/Mongoose-880000?style=for-the-badge&logo=mongoose&logoColor=white" alt="Mongoose" />
   </p>
 </div>
 
@@ -64,8 +63,8 @@
 |                                      BACKEND                                            |
 |                                                                                         |
 |  +--------------------+             +------------------+             +---------------+  |
-|  | Next.js API Routes |  -------->  |   Express API    |  -------->  |  PostgreSQL   |  |
-|  | (Edge / Serverless)|             |  (Core Service)  |             | (via Drizzle) |  |
+|  | Next.js API Routes |  -------->  | Mongoose Models  |  -------->  | MongoDB Atlas |  |
+|  | (Edge / Serverless)|             | (Business Logic) |             | (Cloud DB)    |  |
 |  +--------------------+             +------------------+             +---------------+  |
 +-----------------------------------------------------------------------------------------+
 ```
@@ -92,8 +91,8 @@ KataCut was built from the ground up for absolute paranoia-level privacy.
 | **Web Crypto API**           | Security             | Native browser encryption without heavy polyfills  |
 | **PDF.js**                   | PDF Parsing          | Robust client-side text extraction                 |
 | **Framer Motion**            | Animations           | Smooth swipe-to-cancel and fluid layouts           |
-| **Express & PostgreSQL**     | Backend (Sync)       | Reliable, relational storage for cross-device sync |
-| **Drizzle ORM**              | Database queries     | Type-safe SQL without the bloat                    |
+| **MongoDB Atlas**            | Database             | Flexible NoSQL document storage                    |
+| **Mongoose ODM**             | Data modeling        | Robust schemas and logic separation                |
 
 ## 📸 Screenshots
 
@@ -108,7 +107,7 @@ _(Placeholder for Screenshots)_
 ### Prerequisites
 
 - Node.js 18+
-- PostgreSQL (or Supabase/Neon for the backend)
+- MongoDB (Atlas or local instance)
 
 ### Clone and Install
 
@@ -125,16 +124,13 @@ Create a `.env` file in the root directory based on `.env.example`:
 | Variable              | Description                                        |
 | --------------------- | -------------------------------------------------- |
 | `NEXT_PUBLIC_API_URL` | URL to your backend (e.g. `http://localhost:4000`) |
-| `DATABASE_URL`        | PostgreSQL connection string                       |
+| `MONGODB_URI`         | MongoDB connection string                          |
 | `RESEND_API_KEY`      | API key for transactional emails                   |
 | `JWT_SECRET`          | Secret for signing user sessions                   |
 
 ### Database Setup
 
-```bash
-npm run db:push
-npm run db:seed
-```
+No manual database migrations are needed with MongoDB/Mongoose. Just ensure your `MONGODB_URI` is correctly pointing to your database.
 
 ### Run Development Servers
 
