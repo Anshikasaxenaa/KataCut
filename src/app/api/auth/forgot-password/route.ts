@@ -3,10 +3,9 @@ import { connectDB } from "@/lib/db/connection";
 import { User } from "@/lib/models/User";
 import { Resend } from "resend";
 import crypto from "crypto";
-// Need a mongoose model for VerificationToken or just save it on User.
-// Since we removed drizzle, let's create a temporary token model or save on User.
-// Mongoose way: add resetPasswordToken and resetPasswordExpires to User model.
-// I will rewrite this to use the User model directly.
+// Need a mongoose model for VerificationToken.
+// Mongoose way: add resetPasswordToken and resetPasswordExpires to User model, or use a separate model.
+// I will rewrite this to use a separate model.
 
 const resend = new Resend(process.env.RESEND_API_KEY || "fallback_key");
 

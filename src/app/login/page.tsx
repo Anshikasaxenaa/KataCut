@@ -146,7 +146,13 @@ function LoginForm() {
         </div>
 
         <Button
-          onClick={() => handleGoogleSignIn()}
+          onClick={() => {
+            if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
+              setError("Google Client ID is missing. Please restart your dev server or add it to Vercel.");
+              return;
+            }
+            handleGoogleSignIn();
+          }}
           type="button"
           variant="outline"
           className="w-full bg-white text-[#0F172A] border-[#E2E8F0] hover:bg-[#F8FAFC] font-medium py-6 shadow-sm"

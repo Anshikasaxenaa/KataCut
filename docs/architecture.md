@@ -58,27 +58,28 @@ function detectSubscriptions(transactions):
   return subscriptions
 ```
 
-## Database Schema (Express / PostgreSQL)
+## Database Schema (MongoDB)
 
-While KataCut currently operates entirely offline, the proposed sync backend utilizes the following schema via Drizzle ORM:
+While KataCut currently operates entirely offline, the proposed sync backend utilizes the following schema via Mongoose:
 
-### `users` table
+### `users` collection
 
-| Column       | Type      | Notes                                                   |
+| Field        | Type      | Notes                                                   |
 | ------------ | --------- | ------------------------------------------------------- |
-| `id`         | UUID      | Primary Key                                             |
-| `email_hash` | VARCHAR   | Bcrypt hash of email (we don't store plain text emails) |
-| `created_at` | TIMESTAMP |                                                         |
+| `_id`        | ObjectId  | Primary Key                                             |
+| `email`      | String    | User's email                                            |
+| `passwordHash`| String   | Bcrypt hash of password                                 |
+| `createdAt`  | Date      |                                                         |
 
-### `vaults` table
+### `vaults` collection
 
-| Column           | Type    | Notes                              |
-| ---------------- | ------- | ---------------------------------- |
-| `id`             | UUID    | Primary Key                        |
-| `user_id`        | UUID    | Foreign Key -> users.id            |
-| `encrypted_blob` | TEXT    | AES-256-GCM ciphertext from client |
-| `iv`             | VARCHAR | Initialization Vector              |
-| `salt`           | VARCHAR | PBKDF2 Salt                        |
+| Field            | Type     | Notes                              |
+| ---------------- | -------- | ---------------------------------- |
+| `_id`            | ObjectId | Primary Key                        |
+| `userId`         | ObjectId | Ref -> users._id                   |
+| `encryptedBlob`  | String   | AES-256-GCM ciphertext from client |
+| `iv`             | String   | Initialization Vector              |
+| `salt`           | String   | PBKDF2 Salt                        |
 
 ## API Routes Documentation
 

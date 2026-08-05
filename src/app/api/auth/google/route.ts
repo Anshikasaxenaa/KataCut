@@ -48,17 +48,12 @@ export async function POST(req: Request) {
     }
 
     // Generate JWT
-    const jwtToken = generateToken(user.id);
+    const jwtToken = generateToken(user._id.toString());
 
     return NextResponse.json({
       message: 'Logged in successfully',
       token: jwtToken,
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        image: user.image,
-      }
+      user: user.toJSON()
     });
   } catch (error: any) {
     console.error('Google Auth Error:', error);
