@@ -1,47 +1,48 @@
 <div align="center">
-  <h1 style="font-size: 4em; font-weight: bold;">
-    ₹ KataCut
+  <h1 style="font-size: 4.5em; font-weight: 800; margin-bottom: 0;">
+    KataCut ✂️
   </h1>
-  <p><strong>Privacy-first subscription tracker. Upload your bank statement, find forgotten subscriptions, cancel them. Your data never leaves your device.</strong></p>
+  <p style="font-size: 1.2em; color: #64748B;">
+    <strong>A paranoid, privacy-first subscription tracker and cancellation assistant.</strong>
+  </p>
 
   <p>
     <a href="https://your-vercel-url.vercel.app"><strong>View Live Demo</strong></a>
   </p>
 
   <p>
-    <img src="https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js" />
-    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-    <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+    <img src="https://img.shields.io/badge/Next.js%2015-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js" />
+    <img src="https://img.shields.io/badge/React%2019-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS%204-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
     <img src="https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white" alt="shadcn/ui" />
-    <img src="https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white" alt="PWA" />
-    <img src="https://img.shields.io/badge/Web_Crypto_API-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Web Crypto API" />
+  </p>
+  <p>
+    <img src="https://img.shields.io/badge/Gemini_AI-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Gemini AI" />
     <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
     <img src="https://img.shields.io/badge/Mongoose-880000?style=for-the-badge&logo=mongoose&logoColor=white" alt="Mongoose" />
+    <img src="https://img.shields.io/badge/Web_Crypto_API-FACC15?style=for-the-badge&logo=googlechrome&logoColor=black" alt="Web Crypto API" />
   </p>
 </div>
 
-## Table of Contents
+---
 
-- [✨ Features](#-features)
-- [🏗️ Architecture](#-architecture)
-- [🔒 Privacy & Security](#-privacy--security)
-- [🛠️ Tech Stack](#-tech-stack)
-- [📸 Screenshots](#-screenshots)
-- [🚀 Getting Started](#-getting-started)
-- [📁 Project Structure](#-project-structure)
-- [🗺️ Roadmap](#️-roadmap)
-- [📄 License](#-license)
+## 🔒 The Zero-Knowledge Promise
 
-## ✨ Features
+Most financial apps require you to link your bank account via Plaid, giving them full read access to your entire financial history. **We think that's insane.**
 
-- 📄 **Bank statement PDF parsing**: 100% client-side parsing using PDF.js inside Web Workers.
-- 📱 **SMS transaction import**: Paste raw SMS alerts for instant analysis.
-- 🔍 **Smart subscription detection algorithm**: Uses Levenshtein distance and recurrence patterns to detect recurring charges.
-- 🔐 **Zero-knowledge encryption**: AES-256-GCM encryption with PBKDF2 derived keys.
-- 📊 **Beautiful dashboard**: Gain spending insights with clear charts and categorization.
-- 🚫 **One-click cancellation assistant**: Context-aware email generation to cancel hard-to-find subscriptions.
-- 📲 **PWA**: Install natively on your phone, complete with offline support and haptic feedback.
-- 🌙 **Dark mode support**: Seamless system-aware theming.
+KataCut operates on a **zero-knowledge architecture**:
+1. **Local Parsing**: You drop your bank statement PDF into the app. It is parsed entirely in your browser using `pdf.js` inside isolated Web Workers.
+2. **Local AI Analysis**: The raw text is optionally analyzed to find subscriptions, but the results are only saved locally.
+3. **Local Encryption**: All your financial data is encrypted in your browser using the native Web Crypto API (`AES-256-GCM`). 
+4. **Cloud Sync (Optional)**: If you enable cross-device sync, only encrypted, indecipherable blobs are sent to our MongoDB servers. **We literally cannot read your data.**
+
+## ✨ Core Features
+
+- 🧠 **AI-Powered Discovery**: Powered by Google Gemini 1.5 Flash, KataCut intelligently parses messy bank statements and raw SMS messages to detect hidden subscriptions, billing frequencies, and amounts.
+- ✂️ **1-Click Cancellation Assistant**: Generates context-aware, legally-sound cancellation emails for difficult merchants directly from the app.
+- 🔐 **Military-Grade Encryption**: PBKDF2 derived keys and AES-256-GCM encryption ensure your master password is the only key to your vault.
+- 📱 **Progressive Web App (PWA)**: Install it on your iOS or Android device. Works offline.
+- 🌓 **Beautiful UI**: Built with Tailwind CSS v4 and Framer Motion for buttery-smooth micro-interactions.
 
 ## 🏗️ Architecture
 
@@ -50,66 +51,55 @@
 |                                    USER'S BROWSER                                       |
 |                                                                                         |
 |  +--------------+       +---------------+       +---------------+      +-------------+  |
-|  |              |       |               |       | Web Crypto API|      |             |  |
+|  |              |       | Gemini AI API |       | Web Crypto API|      |             |  |
 |  | PDF.js / SMS | ----> | Detection &   | ----> | (AES-256-GCM) | ---> | IndexedDB   |  |
 |  | Parsing      |       | Normalization |       |               |      | (Local Data)|  |
 |  +--------------+       +---------------+       +---------------+      +-------------+  |
 |                                                                                         |
 +-----------------------------------------------------------------------------------------+
                                             |
-                                            | (Anonymous Stats / Auth / Sync)
+                                            | (Anonymous Stats / Auth / Encrypted Sync)
                                             v
 +-----------------------------------------------------------------------------------------+
-|                                      BACKEND                                            |
+|                                   VERCEL EDGE / CLOUD                                   |
 |                                                                                         |
 |  +--------------------+             +------------------+             +---------------+  |
 |  | Next.js API Routes |  -------->  | Mongoose Models  |  -------->  | MongoDB Atlas |  |
-|  | (Edge / Serverless)|             | (Business Logic) |             | (Cloud DB)    |  |
+|  | (Custom JWT Auth)  |             | (Business Logic) |             | (NoSQL DB)    |  |
 |  +--------------------+             +------------------+             +---------------+  |
 +-----------------------------------------------------------------------------------------+
 ```
 
-> 🔒 **Financial data NEVER leaves the browser.** The server stores only your email hash, UI preferences, and completely anonymized/encrypted blobs if sync is enabled.
+## 🛠️ The Tech Stack
 
-## 🔒 Privacy & Security
+KataCut is built on a bleeding-edge, highly optimized stack:
 
-KataCut was built from the ground up for absolute paranoia-level privacy.
+### Frontend
+- **Framework**: Next.js 16 (App Router) & React 19
+- **Styling**: Tailwind CSS v4, shadcn/ui, Base UI
+- **Animations**: Framer Motion & tw-animate-css
+- **Local Storage**: IndexedDB wrapper for local persistence
 
-- **Encryption**: Data is encrypted using `AES-256-GCM`.
-- **Key Derivation**: Your master password never leaves memory. It generates an encryption key via `PBKDF2` with 100,000 iterations and a random salt.
-- **Data Flow**: PDF parsing happens in isolated Web Workers. Text extraction, regex matching, and database storage (`IndexedDB`) occur entirely on your local machine.
-- **Server Data**: If you opt into sync, the server only receives AES-encrypted ciphertexts. We literally cannot see your transactions.
-- **Open Source**: Don't trust us. Verify the source code yourself.
+### Security & AI
+- **Encryption**: Web Crypto API (Native browser execution)
+- **AI Integration**: `@google/genai` (Gemini 1.5 Flash API)
+- **Authentication**: Custom JWT Middleware + `@react-oauth/google` for identity verification
 
-## 🛠️ Tech Stack
-
-| Technology                   | Purpose              | Why                                                |
-| ---------------------------- | -------------------- | -------------------------------------------------- |
-| **Next.js 16 (App Router)**  | Frontend & Edge API  | Fast rendering, RSCs, seamless routing             |
-| **TypeScript**               | Type Safety          | Catches errors early, superior DX                  |
-| **Tailwind CSS + shadcn/ui** | Styling & Components | Rapid, consistent, and beautiful UI development    |
-| **Web Crypto API**           | Security             | Native browser encryption without heavy polyfills  |
-| **PDF.js**                   | PDF Parsing          | Robust client-side text extraction                 |
-| **Framer Motion**            | Animations           | Smooth swipe-to-cancel and fluid layouts           |
-| **MongoDB Atlas**            | Database             | Flexible NoSQL document storage                    |
-| **Mongoose ODM**             | Data modeling        | Robust schemas and logic separation                |
-
-## 📸 Screenshots
-
-_(Placeholder for Screenshots)_
-
-<div style="display: flex; gap: 10px;">
-  <img src="public/screenshots/dashboard.png" width="200" alt="Dashboard View" />
-</div>
+### Backend & Database
+- **Backend API**: Next.js Serverless Route Handlers
+- **Database**: MongoDB Atlas
+- **ODM**: Mongoose 9.9.x
+- **Email Delivery**: Resend
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-
 - Node.js 18+
-- MongoDB (Atlas or local instance)
+- A MongoDB cluster (e.g., free tier on MongoDB Atlas)
+- A Google Cloud project (for Google Auth Client ID)
+- A Google AI Studio API Key (for Gemini)
 
-### Clone and Install
+### 1. Clone & Install
 
 ```bash
 git clone https://github.com/yourusername/katacut.git
@@ -117,53 +107,42 @@ cd katacut
 npm install
 ```
 
-### Environment Variables
+### 2. Environment Setup
 
-Create a `.env` file in the root directory based on `.env.example`:
+Create a `.env` file in the root directory:
 
-| Variable              | Description                                        |
-| --------------------- | -------------------------------------------------- |
-| `NEXT_PUBLIC_API_URL` | URL to your backend (e.g. `http://localhost:4000`) |
-| `MONGODB_URI`         | MongoDB connection string                          |
-| `RESEND_API_KEY`      | API key for transactional emails                   |
-| `JWT_SECRET`          | Secret for signing user sessions                   |
+```env
+# Database
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/katacut
 
-### Database Setup
+# Custom JWT Auth
+JWT_SECRET=generate_a_random_secure_string
 
-No manual database migrations are needed with MongoDB/Mongoose. Just ensure your `MONGODB_URI` is correctly pointing to your database.
+# Google OAuth
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
 
-### Run Development Servers
+# AI Analysis
+GEMINI_API_KEY=your_gemini_api_key
+
+# Email
+RESEND_API_KEY=your_resend_api_key
+```
+
+### 3. Run the Development Server
 
 ```bash
 npm run dev
 ```
 
-## 📁 Project Structure
-
-```text
-kata-cut/
-├── src/
-│   ├── app/                # Next.js App Router (pages, layouts, api)
-│   ├── components/         # Reusable UI components (shadcn, forms)
-│   ├── hooks/              # Custom React hooks (useAuth, useVault)
-│   ├── lib/                # Core business logic
-│   │   ├── cancellation/   # Email generation, merchant database
-│   │   ├── crypto/         # Web Crypto wrapper, PBKDF2 logic
-│   │   ├── parsers/        # Regex banks, PDF worker logic
-│   │   └── types/          # TypeScript interfaces
-│   └── styles/             # Global CSS
-├── public/                 # PWA icons, manifest, static assets
-├── docs/                   # Deep-dive architectural documentation
-├── scripts/                # Utility scripts (icon generation, etc.)
-└── next.config.ts          # PWA and Next.js configuration
-```
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the app. No manual database migrations are required with Mongoose!
 
 ## 🗺️ Roadmap
 
-- [ ] Support for **SBI, Axis, and Kotak** bank statements.
-- [ ] Automatic **UPI AutoPay** detection via SMS.
-- [ ] Push notification alerts for upcoming renewals (Backend Integration).
-- [ ] Cross-device encrypted sync using Express/PostgreSQL.
+- [x] Migrate backend to MongoDB & Next.js App Router
+- [x] Integrate Gemini AI for smart statement analysis
+- [ ] Add visual spending charts to the dashboard
+- [ ] Implement push notifications for upcoming renewals (PWA)
+- [ ] Multi-device encrypted sync layer
 
 ## 📄 License
 
