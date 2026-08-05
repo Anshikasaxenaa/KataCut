@@ -13,8 +13,8 @@ export function Logo({ className, showText = true }: LogoProps) {
         <Scissors className="w-4 h-4 text-zinc-950" strokeWidth={2.5} />
       </div>
       {showText && (
-        <span className="text-xl font-bold tracking-tight text-zinc-50">
-          Kata<span className="text-emerald-400">Cut</span>
+        <span className="text-xl font-bold tracking-tight text-[#0F172A]">
+          Kata<span className="text-[#10B981]">Cut</span>
         </span>
       )}
     </div>

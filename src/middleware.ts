@@ -8,8 +8,7 @@ export default withAuth(
       req.nextUrl.pathname === "/login" ||
       req.nextUrl.pathname === "/register" ||
       req.nextUrl.pathname === "/forgot-password" ||
-      req.nextUrl.pathname === "/reset-password" ||
-      req.nextUrl.pathname === "/"; // Assuming landing page is public but logged in users go to dashboard
+      req.nextUrl.pathname === "/reset-password";
 
     // If the user is on an auth/public page but is already authenticated, redirect to dashboard
     if (isAuthPage && isAuth) {

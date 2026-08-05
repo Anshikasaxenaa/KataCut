@@ -8,11 +8,12 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function POST(req: Request) {
   try {
-    // Optional: Protect the route to only logged in users
+    // Optional: Protect the route to only logged in users if needed, 
+    // but for zero-knowledge local mode, we allow it without a session.
     const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // if (!session) {
+    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // }
 
     const { text } = await req.json();
 
@@ -22,7 +23,7 @@ export async function POST(req: Request) {
 
     // Call Gemini 2.5 Flash to extract subscriptions
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-1.5-flash',
       contents: `You are an expert financial data extractor. I will provide raw text from a bank statement or SMS.
       Your task is to find all recurring subscriptions and return them as a JSON array.
       

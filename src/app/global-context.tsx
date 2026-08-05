@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { loadData } from "@/lib/storage/indexeddb";
 
 export type Subscription = {
   name: string;
@@ -52,6 +53,29 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
     setDormantCount(dormant);
     setActiveCount(active);
   };
+
+  useEffect(() => {
+    const fetchSubscriptions = async () => {
+      try {
+        const data = await loadData<Subscription[]>("subscriptions", "latest");
+        if (data) {
+          setSubscriptions(data);
+          updateCounts(data);
+        }
+      } catch (e) {
+        console.error("Failed to load subscriptions", e);
+      }
+    };
+
+    fetchSubscriptions();
+
+    const handleUpdate = () => fetchSubscriptions();
+    window.addEventListener("subscriptionsUpdated", handleUpdate);
+    
+    return () => {
+      window.removeEventListener("subscriptionsUpdated", handleUpdate);
+    };
+  }, []);
 
   return (
     <GlobalContext.Provider
