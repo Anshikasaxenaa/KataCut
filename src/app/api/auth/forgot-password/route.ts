@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import { users, verificationTokens } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { connectDB } from "@/lib/db/connection";
+import { User } from "@/lib/models/User";
 import { Resend } from "resend";
 import crypto from "crypto";
+// Need a mongoose model for VerificationToken or just save it on User.
+// Since we removed drizzle, let's create a temporary token model or save on User.
+// Mongoose way: add resetPasswordToken and resetPasswordExpires to User model.
+// I will rewrite this to use the User model directly.
 
 const resend = new Resend(process.env.RESEND_API_KEY || "fallback_key");
 
@@ -15,46 +18,43 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Email is required" }, { status: 400 });
     }
 
-    // Check if user exists
-    const userRecord = await db
-      .select()
-      .from(users)
-      .where(eq(users.email, email))
-      .limit(1);
+    await connectDB();
+    const user = await User.findByEmail(email);
 
-    if (userRecord.length === 0) {
-      // Don't leak that the email isn't in our DB for security reasons
+    if (!user) {
       return NextResponse.json({ message: "If the email exists, a reset link was sent." });
     }
 
-    // Generate a secure random token
     const resetToken = crypto.randomBytes(32).toString("hex");
-    
-    // Set expiration for 1 hour from now
     const expires = new Date();
     expires.setHours(expires.getHours() + 1);
 
-    // Save token in the database
-    // We use the existing verificationToken table created by NextAuth
-    await db.insert(verificationTokens).values({
+    // Using a separate Token model would be cleaner if we wanted to stick to the old DB structure exactly, 
+    // but saving to user is easier. Let's create a VerificationToken model quickly in the file or just use mongoose directly here.
+    const mongoose = (await import('mongoose')).default;
+    const TokenSchema = new mongoose.Schema({
+      identifier: String,
+      token: String,
+      expires: Date,
+    });
+    const VerificationToken = mongoose.models.VerificationToken || mongoose.model('VerificationToken', TokenSchema);
+
+    await VerificationToken.create({
       identifier: email,
       token: resetToken,
       expires,
     });
 
-    // Determine the base URL for the reset link
     const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
     const resetLink = `${baseUrl}/reset-password?token=${resetToken}&email=${encodeURIComponent(email)}`;
     
-    // Log the link for local testing since email delivery can be tricky
     console.log("===================================");
     console.log("PASSWORD RESET LINK:", resetLink);
     console.log("===================================");
 
-    // Send the email using Resend
     if (process.env.RESEND_API_KEY) {
       await resend.emails.send({
-        from: "KataCut Security <security@katacut.com>", // Replace with verified domain in prod
+        from: "KataCut Security <security@katacut.com>",
         to: email,
         subject: "Password Reset Request - KataCut",
         html: `

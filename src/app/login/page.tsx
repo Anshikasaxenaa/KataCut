@@ -24,7 +24,8 @@ function LoginForm() {
   const handleGoogleSignIn = async () => {
     try {
       setIsGoogleLoading(true);
-      await login("google");
+      alert("Google Sign In requires additional OAuth setup without NextAuth.");
+      setIsGoogleLoading(false);
     } catch (err) {
       console.error(err);
       setIsGoogleLoading(false);
@@ -43,10 +44,9 @@ function LoginForm() {
     }
 
     try {
-      const res = await login("credentials", {
+      const res = await login({
         email: formData.email,
         password: formData.password,
-        redirect: false,
       });
 
       if (res?.error) {

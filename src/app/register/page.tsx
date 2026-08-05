@@ -25,7 +25,8 @@ function RegisterForm() {
   const handleGoogleSignUp = async () => {
     try {
       setIsGoogleLoading(true);
-      await login("google");
+      alert("Google Sign Up requires additional OAuth setup without NextAuth.");
+      setIsGoogleLoading(false);
     } catch (err) {
       console.error(err);
       setIsGoogleLoading(false);
@@ -56,10 +57,9 @@ function RegisterForm() {
       }
 
       // If registration is successful, log them in using credentials
-      const signInRes = await login("credentials", {
+      const signInRes = await login({
         email: formData.email,
         password: formData.password,
-        redirect: false,
       });
 
       if (signInRes?.error) {

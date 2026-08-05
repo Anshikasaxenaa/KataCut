@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import { users, verificationTokens } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
+import { connectDB } from "@/lib/db/connection";
+import { User } from "@/lib/models/User";
+import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
 export async function POST(req: Request) {
@@ -12,44 +12,38 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
     }
 
-    // Verify token exists and matches the email
-    const tokenRecord = await db
-      .select()
-      .from(verificationTokens)
-      .where(
-        and(
-          eq(verificationTokens.token, token),
-          eq(verificationTokens.identifier, email)
-        )
-      )
-      .limit(1);
+    await connectDB();
+    
+    // Reuse the VerificationToken model
+    const TokenSchema = new mongoose.Schema({
+      identifier: String,
+      token: String,
+      expires: Date,
+    });
+    const VerificationToken = mongoose.models.VerificationToken || mongoose.model('VerificationToken', TokenSchema);
 
-    if (tokenRecord.length === 0) {
+    const tokenRecord = await VerificationToken.findOne({
+      token,
+      identifier: email
+    });
+
+    if (!tokenRecord) {
       return NextResponse.json({ message: "Invalid or expired reset token" }, { status: 400 });
     }
 
-    // Check if token is expired
-    if (new Date() > new Date(tokenRecord[0].expires)) {
-      // Clean up expired token
-      await db
-        .delete(verificationTokens)
-        .where(eq(verificationTokens.token, token));
+    if (new Date() > new Date(tokenRecord.expires)) {
+      await VerificationToken.deleteOne({ _id: tokenRecord._id });
       return NextResponse.json({ message: "Reset token has expired" }, { status: 400 });
     }
 
-    // Hash the new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // Update user's password
-    await db
-      .update(users)
-      .set({ password: hashedPassword })
-      .where(eq(users.email, email));
+    await User.updateOne(
+      { email },
+      { $set: { passwordHash: hashedPassword } }
+    );
 
-    // Delete the used token
-    await db
-      .delete(verificationTokens)
-      .where(eq(verificationTokens.token, token));
+    await VerificationToken.deleteOne({ _id: tokenRecord._id });
 
     return NextResponse.json({ message: "Password updated successfully" }, { status: 200 });
   } catch (error) {

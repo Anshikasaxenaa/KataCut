@@ -4,12 +4,12 @@ import { useState } from "react";
 import { TopHeader } from "@/components/dashboard/TopHeader";
 import { Shield, Key, Trash2, Database, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useSession, signOut } from "next-auth/react";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function SettingsPage() {
-  const { data: session, status } = useSession();
-  const [name, setName] = useState(session?.user?.name || "");
-  const [image, setImage] = useState(session?.user?.image || "");
+  const { user, logout } = useAuth();
+  const [name, setName] = useState(user?.name || "");
+  const [image, setImage] = useState(user?.image || "");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
@@ -81,16 +81,14 @@ export default function SettingsPage() {
               </h2>
               
               <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-sm border border-[#E2E8F0]">
-                {status === "loading" ? (
-                  <p>Loading profile...</p>
-                ) : !session?.user ? (
+                {user === null ? (
                   <p>Please log in to manage your profile.</p>
                 ) : (
                   <div className="space-y-6">
                     <div className="flex items-center justify-between gap-4 pb-6 border-b border-[#E2E8F0]">
                       <div>
                         <h3 className="text-lg font-bold text-[#0F172A] mb-1">Connected Email</h3>
-                        <p className="text-[#0F172A]/60 text-sm">{session.user.email}</p>
+                        <p className="text-[#0F172A]/60 text-sm">{user.email}</p>
                       </div>
                     </div>
 
@@ -150,7 +148,7 @@ export default function SettingsPage() {
                         <h3 className="text-lg font-bold text-[#F43F5E] mb-1">Log Out</h3>
                         <p className="text-[#0F172A]/60 text-sm">Sign out of your account on this device.</p>
                       </div>
-                      <Button onClick={() => signOut()} variant="outline" className="text-[#F43F5E] border-[#F43F5E]/20 hover:bg-[#F43F5E]/10 flex items-center gap-2">
+                      <Button onClick={() => logout()} variant="outline" className="text-[#F43F5E] border-[#F43F5E]/20 hover:bg-[#F43F5E]/10 flex items-center gap-2">
                         <LogOut className="w-4 h-4" /> Log Out
                       </Button>
                     </div>

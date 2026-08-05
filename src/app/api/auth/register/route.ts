@@ -1,50 +1,65 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import { users } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
-import bcrypt from "bcryptjs";
+import { connectDB } from "@/lib/db/connection";
+import { User } from "@/lib/models/User";
+import { generateToken } from "@/lib/utils/jwt";
 
 export async function POST(req: Request) {
   try {
     const { name, email, password } = await req.json();
 
-    if (!name || !email || !password) {
+    if (!email || !password) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    // Check if user already exists
-    const existingUser = await db
-      .select()
-      .from(users)
-      .where(eq(users.email, email))
-      .limit(1);
-
-    if (existingUser.length > 0) {
+    if (password.length < 8) {
       return NextResponse.json(
-        { message: "User with this email already exists" },
+        { message: "Password must be at least 8 characters long" },
+        { status: 400 }
+      );
+    }
+
+    await connectDB();
+
+    // Check if user already exists
+    const existingUser = await User.findByEmail(email);
+
+    if (existingUser) {
+      return NextResponse.json(
+        { message: "Email already registered" },
         { status: 409 }
       );
     }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Create the user (pre-save hook hashes password... wait, I didn't add password hashing in pre-save. The instructions said hash with bcrypt. I need to do it here or update User model.)
+    // Let's import bcrypt and hash here, since my User model didn't have a pre-save hook for hashing.
+    const bcrypt = await import("bcryptjs");
+    const passwordHash = await bcrypt.hash(password, 12);
 
-    // Create the user
-    await db.insert(users).values({
+    const user = await User.create({
       name,
       email,
-      password: hashedPassword,
+      passwordHash,
+      preferences: {}
     });
 
+    const token = generateToken(user._id.toString());
+
     return NextResponse.json(
-      { message: "User registered successfully" },
+      { 
+        message: "User registered successfully",
+        token,
+        user: user.toJSON()
+      },
       { status: 201 }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error("Registration error:", error);
+    if (error.name === 'ValidationError') {
+      return NextResponse.json({ message: error.message }, { status: 400 });
+    }
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }

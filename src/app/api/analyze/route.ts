@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../auth/[...nextauth]/route';
 
 // Initialize the Google Gen AI SDK
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -10,11 +8,7 @@ export async function POST(req: Request) {
   try {
     // Optional: Protect the route to only logged in users if needed, 
     // but for zero-knowledge local mode, we allow it without a session.
-    const session = await getServerSession(authOptions);
-    // if (!session) {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    // }
-
+    
     const { text } = await req.json();
 
     if (!text) {
