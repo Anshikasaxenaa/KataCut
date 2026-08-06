@@ -24,10 +24,11 @@ function RegisterForm() {
   const [error, setError] = useState("");
 
   const handleGoogleSignUp = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
+    flow: 'auth-code',
+    onSuccess: async (codeResponse) => {
       try {
         setIsGoogleLoading(true);
-        const res = await loginWithGoogle(tokenResponse.access_token);
+        const res = await loginWithGoogle(codeResponse.code);
         if (res?.error) {
           throw new Error(res.error);
         }

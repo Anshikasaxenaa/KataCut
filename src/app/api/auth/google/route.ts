@@ -2,28 +2,33 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db/connection';
 import { User } from '@/lib/models/User';
 import { generateToken } from '@/lib/utils/jwt';
+import { OAuth2Client } from 'google-auth-library';
 
 export async function POST(req: Request) {
   try {
     await connectDB();
-    const { token } = await req.json();
+    const { code } = await req.json();
 
-    if (!token) {
-      return NextResponse.json({ message: 'No token provided' }, { status: 400 });
+    if (!code) {
+      return NextResponse.json({ message: 'No authorization code provided' }, { status: 400 });
     }
 
-    // Fetch user profile from Google using the access token
-    const googleRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+    const client = new OAuth2Client(
+      process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      'postmessage'
+    );
+
+    // Exchange the authorization code for tokens
+    const { tokens } = await client.getToken(code);
+    client.setCredentials(tokens);
+
+    // Fetch user profile from Google using the credentials
+    const googleRes = await client.request({
+      url: 'https://www.googleapis.com/oauth2/v3/userinfo'
     });
 
-    if (!googleRes.ok) {
-      return NextResponse.json({ message: 'Failed to authenticate with Google' }, { status: 401 });
-    }
-
-    const googleUser = await googleRes.json();
+    const googleUser: any = googleRes.data;
     const { email, name, picture, sub: googleId } = googleUser;
 
     if (!email) {
@@ -37,8 +42,7 @@ export async function POST(req: Request) {
       // If user exists but was created with credentials, we just log them in
       // Optional: you could update their image or name here if you want
     } else {
-      // Create a new user (with a dummy password since they use Google)
-      // They can reset their password later if they want to log in with email
+      // Create a new user
       user = await User.create({
         name,
         email,

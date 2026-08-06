@@ -16,7 +16,7 @@ type AuthContextType = {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (credentials: any) => Promise<any>;
-  loginWithGoogle: (token: string) => Promise<any>;
+  loginWithGoogle: (code: string) => Promise<any>;
   register: (data: any) => Promise<any>;
   logout: () => Promise<void>;
 };
@@ -64,8 +64,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return data;
   };
 
-  const loginWithGoogle = async (token: string) => {
-    const data: any = await api.post("/auth/google", { token });
+  const loginWithGoogle = async (code: string) => {
+    const data: any = await api.post("/auth/google", { code });
     if (data.token) {
       localStorage.setItem("token", data.token);
       document.cookie = `token=${data.token}; path=/; max-age=604800`;
