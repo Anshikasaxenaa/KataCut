@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db/connection";
 import { User } from "@/lib/models/User";
 import { generateToken } from "@/lib/utils/jwt";
+import bcrypt from "bcryptjs";
 
 export async function POST(req: Request) {
   try {
@@ -33,9 +34,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Create the user (pre-save hook hashes password... wait, I didn't add password hashing in pre-save. The instructions said hash with bcrypt. I need to do it here or update User model.)
-    // Let's import bcrypt and hash here, since my User model didn't have a pre-save hook for hashing.
-    const bcrypt = await import("bcryptjs");
     const passwordHash = await bcrypt.hash(password, 12);
 
     const user = await User.create({

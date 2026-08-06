@@ -21,15 +21,23 @@ export async function POST(req: Request) {
 
     // Exchange the authorization code for tokens
     const { tokens } = await client.getToken(code);
-    client.setCredentials(tokens);
+    
+    if (!tokens.id_token) {
+      throw new Error("No id_token returned from Google");
+    }
 
-    // Fetch user profile from Google using the credentials
-    const googleRes = await client.request({
-      url: 'https://www.googleapis.com/oauth2/v3/userinfo'
+    // Verify the ID token and get user info
+    const ticket = await client.verifyIdToken({
+      idToken: tokens.id_token,
+      audience: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
     });
 
-    const googleUser: any = googleRes.data;
-    const { email, name, picture, sub: googleId } = googleUser;
+    const payload = ticket.getPayload();
+    if (!payload) {
+      throw new Error("Failed to get payload from Google token");
+    }
+
+    const { email, name, picture, sub: googleId } = payload;
 
     if (!email) {
       return NextResponse.json({ message: 'Google account has no email' }, { status: 400 });
@@ -61,6 +69,6 @@ export async function POST(req: Request) {
     });
   } catch (error: any) {
     console.error('Google Auth Error:', error);
-    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ message: error.message || 'Internal server error' }, { status: 500 });
   }
 }
