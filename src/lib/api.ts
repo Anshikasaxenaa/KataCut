@@ -55,7 +55,7 @@ async function request(endpoint: string, options: RequestInit) {
   }
 
   if (!response.ok) {
-    const error = data?.error || response.statusText;
+    const error = data?.message || data?.error || response.statusText;
     throw new Error(error);
   }
 

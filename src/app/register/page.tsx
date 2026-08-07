@@ -13,7 +13,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const { login, loginWithGoogle } = useAuth();
+  const { register, loginWithGoogle } = useAuth();
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -57,25 +57,14 @@ function RegisterForm() {
     }
 
     try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.message || "Something went wrong");
-      }
-
-      // If registration is successful, log them in using credentials
-      const signInRes = await login({
+      const res = await register({
+        name: formData.name,
         email: formData.email,
         password: formData.password,
       });
 
-      if (signInRes?.error) {
-        throw new Error(signInRes.error);
+      if (res?.error) {
+        throw new Error(res.error);
       }
 
       router.push("/dashboard");
